@@ -17,13 +17,30 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <sys/time.h>
+#include "time_measurement.h"
 /* 
 * TODO: Implement functions to measure time. 
 * TODO: Remove TestFileWriting() after you are sure, 
 * that OpenTimeFile() and writeTimeToFile work properly.
 * TODO: Include updated time_measurement.h Header-File.
 */
+
+/* Start time-measurement */
+double dstartMesGTOD(void)
+{
+  struct timeval tim;
+  gettimeofday(&tim, NULL);
+  return tim.tv_sec+(tim.tv_usec/1000000.0);
+}
+
+/* Stop time-measurement */
+double dstopMesGTOD(double dStartTime)
+{
+  struct timeval tim;
+  gettimeofday(&tim, NULL);
+  return (tim.tv_sec+(tim.tv_usec/1000000.0)) - dStartTime;
+}
 
 /* Opens File for storing N/Time-Values */
 FILE* OpenTimeFile()
@@ -38,10 +55,10 @@ FILE* OpenTimeFile()
 }
 
 /* Writes a value with corresponding index in a file */
-void writeTimeToFile(FILE *f, int index, unsigned long value)
+void writeTimeToFile(FILE *f, int index, double value)
 {
 	/* print index and long integer */
-	fprintf(f, "%d %lu \n", index, value);
+	fprintf(f, "%d %f \n", index, value);
 
 	/* print some text
 	const char *text = "Text To Write";
@@ -61,12 +78,3 @@ void TestFileWriting()
 	writeTimeToFile(f, 1000, 12);
 	fclose(f);
 }
-
-int main()
-{
-	TestFileWriting();
-	return 0;
-}
-
-
-

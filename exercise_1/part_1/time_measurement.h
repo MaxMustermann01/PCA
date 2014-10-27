@@ -17,6 +17,34 @@
 #ifndef TIME_MEASUREMENT_H
 #define TIME_MEASUREMENT_H
 
-/* TODO: Define functions for the time-measurement */
+/*
+ * DESCRIPTION - Starts a time-measurement, based on the gettimeofday() functions
+ *               It has a resolution up to one microsecond.
+ * PARAMETER   - void
+ * RETURN      - double: elapsed seconds this day (is the parameter for dstopMesGTOD())
+ */
+double dstartMesGTOD(void);
+
+/*
+ * DESCRIPTION - Stops the time-measurement, based on the gettimeofday() functions.
+ *               It has a resolution up to one microsecond.
+ * PARAMETER   - double: return-value of dstartMesGTOD()
+ * RETURN      - double: elapsed seconds since dstartMesGTOD()
+ */
+double dstopMesGTOD(double);
+
+/*
+ * DESCRIPTION - 
+ * PARAMETER   - 
+ * RETURN      - 
+ */
+FILE* OpenTimeFile(void);
+
+/*
+ * DESCRIPTION - 
+ * PARAMETER   - 
+ * RETURN      - 
+ */
+void writeTimeToFile(FILE *, int, double);
 
 #endif

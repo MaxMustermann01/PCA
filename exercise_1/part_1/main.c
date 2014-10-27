@@ -17,6 +17,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "matrix_vector_mult.h"
+#include "time_measurement.h"
+#include <unistd.h>
 
 int main(int argc, char* argv[]){
   int iSeed=0;
@@ -24,6 +26,10 @@ int main(int argc, char* argv[]){
   sMatrixInt Mat_Int, Vec_Int, Res_Int;
   sMatrixDouble Mat_Double, Vec_Double, Res_Double;
   sMatrixFloat Mat_Float, Vec_Float, Res_Float;
+  double dStartTime=0.0, dElapsedTime=0.0;
+  
+  /* Open a File for storing time-measurment-values */
+  FILE * f = OpenTimeFile();
   
   /* Check integrity of arguments */
   if(argc!=3)
@@ -62,14 +68,24 @@ int main(int argc, char* argv[]){
   vInitMatrixFloat(&Mat_Float, iSeed);
   vInitMatrixFloat(&Vec_Float, iSeed);
   
-  /* Start multiplication */
+  /* Start multiplication, measure time and write resulting value in file */
   /* integer */
-  /* TODO: Time-Measurement */
+  dStartTime = dstartMesGTOD();
   vMatrixVecMulInt(&Mat_Int, &Vec_Int, &Res_Int);
-  vMatrixVecMulDouble(&Mat_Double, &Vec_Double, &Res_Double);
-  vMatrixVecMulFloat(&Mat_Float, &Vec_Float, &Res_Float);
+  dElapsedTime = dstopMesGTOD(dStartTime);
+  writeTimeToFile(f,0,dElapsedTime);
   
-  /* TODO: save measurment-results in file to plot them via GNUPlot */
+  /* double */
+  dStartTime = dstartMesGTOD();
+  vMatrixVecMulDouble(&Mat_Double, &Vec_Double, &Res_Double);
+  dElapsedTime = dstopMesGTOD(dStartTime);
+  writeTimeToFile(f,1,dElapsedTime);
+  
+  /* float */
+  dStartTime = dstartMesGTOD();
+  vMatrixVecMulFloat(&Mat_Float, &Vec_Float, &Res_Float);
+  dElapsedTime = dstopMesGTOD(dStartTime);
+  writeTimeToFile(f,1,dElapsedTime);
   
   /* Free Allocated Memory */
   /* integer */
