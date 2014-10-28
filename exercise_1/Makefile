@@ -25,7 +25,10 @@ matvecmult :
 			-o matvecmult
 
 approximatepi :
-	$(CC) $(CFLAGS)	part_2/ApproximationOfPi.c -o approximatepi
+	$(CC) $(CFLAGS)	part_2/ApproximationOfPi.c \
+			part_2/ApproximationOfPi.h \
+			part_2/main.c \
+			-o approximatepi
 
 clean :
 	rm -f matvecmult approximatepi Time_measurement.dat
