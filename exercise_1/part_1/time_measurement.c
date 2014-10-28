@@ -28,14 +28,13 @@ unsigned long long ullstartMesRDTSC(void)
 }
 
 /* stop time measurement based on rdtsc() */
-/* TODO: adjust CPU freq for Creek-server */
 double dstopMesRDTSC(unsigned long long ullStartTime)
 {
   unsigned long long ullStopTime;
   ullStopTime = rdtsc();
-  /* The denominator depends on the CPU freq. In my case it is 2.2 GHz */
+  /* The denominator depends on the CPU freq. In my case it is 1.2 GHz */
   /* To get the right value, run: lscpu on commandline */
-  return (double)(ullStopTime - ullStartTime) / 2200000000;
+  return (double)(ullStopTime - ullStartTime) / 120000000;
 }
 
 /* Start time-measurement */
