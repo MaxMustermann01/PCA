@@ -19,12 +19,24 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include "time_measurement.h"
-/* 
-* TODO: Implement functions to measure time. 
-* TODO: Remove TestFileWriting() after you are sure, 
-* that OpenTimeFile() and writeTimeToFile work properly.
-* TODO: Include updated time_measurement.h Header-File.
-*/
+#include "utils.h"
+
+/* start time measurement based on rdtsc() */
+unsigned long long ullstartMesRDTSC(void)
+{
+  return rdtsc();
+}
+
+/* stop time measurement based on rdtsc() */
+/* TODO: adjust CPU freq for Creek-server */
+double dstopMesRDTSC(unsigned long long ullStartTime)
+{
+  unsigned long long ullStopTime;
+  ullStopTime = rdtsc();
+  /* The denominator depends on the CPU freq. In my case it is 2.2 GHz */
+  /* To get the right value, run: lscpu on commandline */
+  return (double)(ullStopTime - ullStartTime) / 2200000000;
+}
 
 /* Start time-measurement */
 double dstartMesGTOD(void)
@@ -45,36 +57,31 @@ double dstopMesGTOD(double dStartTime)
 /* Opens File for storing N/Time-Values */
 FILE* OpenTimeFile()
 {
-	FILE *f = fopen("Time_measurement.dat", "w");
-	if (f == NULL)
-	{
-	    printf("Error opening file!\n");
-	    exit(1);
-	}
-	return f;
+  FILE *f = fopen("Time_measurement.dat", "w");
+  if (f == NULL)
+  {
+    printf("Error opening file!\n");
+    exit(1);
+    
+  }
+  return f;
 }
 
 /* Writes a value with corresponding index in a file */
 void writeTimeToFile(FILE *f, int index, double value)
 {
-	/* print index and long integer */
-	fprintf(f, "%d %f \n", index, value);
-
-	/* print some text
-	const char *text = "Text To Write";
-	fprintf(f, "Some text: %s\n", text);
-	*/
-
+  /* print index and long integer */
+  fprintf(f, "%d %f \n", index, value);
 }
 
 /* Just for testing */
 void TestFileWriting()
 {
-	FILE* f = OpenTimeFile();
-	writeTimeToFile(f, 0, 10);
-	writeTimeToFile(f, 1, 10);
-	writeTimeToFile(f, 2, 36);
-	writeTimeToFile(f, 10, 10);
-	writeTimeToFile(f, 1000, 12);
-	fclose(f);
+  FILE* f = OpenTimeFile();
+  writeTimeToFile(f, 0, 10);
+  writeTimeToFile(f, 1, 10);
+  writeTimeToFile(f, 2, 36);
+  writeTimeToFile(f, 10, 10);
+  writeTimeToFile(f, 1000, 12);
+  fclose(f);
 }

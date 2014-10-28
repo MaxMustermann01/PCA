@@ -17,6 +17,7 @@
 #ifndef TIME_MEASUREMENT_H
 #define TIME_MEASUREMENT_H
 
+/* TODO: maybe add some comments and DESCRIPTION */
 /*
  * DESCRIPTION - Starts a time-measurement, based on the gettimeofday() functions
  *               It has a resolution up to one microsecond.
@@ -32,6 +33,20 @@ double dstartMesGTOD(void);
  * RETURN      - double: elapsed seconds since dstartMesGTOD()
  */
 double dstopMesGTOD(double);
+
+/*
+ * DESCRIPTION - Start a time-measurement, based on the rdtsc() function
+ * PARAMETER   - void
+ * RETURN      - ull: actual process ticks
+ */
+unsigned long long ullstartMesRDTSC(void);
+
+/*
+ * DESCRIPTION - Stops the time-measurement, based on the rdtsc() function
+ * PARAMETER   - ull: return value of dstartMesRDTSC()
+ * RETURN      - double: elapsed seconds sind start of measurement
+ */
+double dstopMesRDTSC(unsigned long long);
 
 /*
  * DESCRIPTION - 

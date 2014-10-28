@@ -26,7 +26,9 @@ int main(int argc, char* argv[]){
   sMatrixInt Mat_Int, Vec_Int, Res_Int;
   sMatrixDouble Mat_Double, Vec_Double, Res_Double;
   sMatrixFloat Mat_Float, Vec_Float, Res_Float;
-  double dStartTime=0.0, dElapsedTime=0.0;
+  double dStartTimeGTOD=0.0, dElapsedTimeGTOD=0.0;
+  unsigned long long ullStartTimeRDTSC=0.0;
+  double dElapsedTimeRDTSC=0.0;
   
   /* Open a File for storing time-measurment-values */
   FILE * f = OpenTimeFile();
@@ -68,24 +70,41 @@ int main(int argc, char* argv[]){
   vInitMatrixFloat(&Mat_Float, iSeed);
   vInitMatrixFloat(&Vec_Float, iSeed);
   
-  /* Start multiplication, measure time and write resulting value in file */
-  /* integer */
-  dStartTime = dstartMesGTOD();
+  /* Start time-measurement, integer */
+  dStartTimeGTOD = dstartMesGTOD();
+  ullStartTimeRDTSC = ullstartMesRDTSC();
+  /* Start multiplication, integer */
   vMatrixVecMulInt(&Mat_Int, &Vec_Int, &Res_Int);
-  dElapsedTime = dstopMesGTOD(dStartTime);
-  writeTimeToFile(f,0,dElapsedTime);
+  /* Stop time-measurement, integer */
+  dElapsedTimeGTOD = dstopMesGTOD(dStartTimeGTOD);
+  dElapsedTimeRDTSC = dstopMesRDTSC(ullStartTimeRDTSC);
+  /* Write reslulting values in file, integer */
+  writeTimeToFile(f,0,dElapsedTimeGTOD);
+  writeTimeToFile(f,1,dElapsedTimeRDTSC);
   
-  /* double */
-  dStartTime = dstartMesGTOD();
+  /* Start time-measurement, double */
+  dStartTimeGTOD = dstartMesGTOD();
+  ullStartTimeRDTSC = ullstartMesRDTSC();
+  /* Start multiplication, double */
   vMatrixVecMulDouble(&Mat_Double, &Vec_Double, &Res_Double);
-  dElapsedTime = dstopMesGTOD(dStartTime);
-  writeTimeToFile(f,1,dElapsedTime);
+  /* Stop time-measurement, double */
+  dElapsedTimeGTOD = dstopMesGTOD(dStartTimeGTOD);
+  dElapsedTimeRDTSC = dstopMesRDTSC(ullStartTimeRDTSC);
+  /* Write reslulting values in file, integer */
+  writeTimeToFile(f,2,dElapsedTimeGTOD);
+  writeTimeToFile(f,3,dElapsedTimeRDTSC);
   
-  /* float */
-  dStartTime = dstartMesGTOD();
+  /* Start time-measurement, float */
+  dStartTimeGTOD = dstartMesGTOD();
+  ullStartTimeRDTSC = ullstartMesRDTSC();
+  /* Start multiplication, float */
   vMatrixVecMulFloat(&Mat_Float, &Vec_Float, &Res_Float);
-  dElapsedTime = dstopMesGTOD(dStartTime);
-  writeTimeToFile(f,1,dElapsedTime);
+  /* Stop time-measurement, double */
+  dElapsedTimeGTOD = dstopMesGTOD(dStartTimeGTOD);
+  dElapsedTimeRDTSC = dstopMesRDTSC(ullStartTimeRDTSC);
+  /* Write reslulting values in file, integer */
+  writeTimeToFile(f,4,dElapsedTimeGTOD);
+  writeTimeToFile(f,5,dElapsedTimeRDTSC);
   
   /* Free Allocated Memory */
   /* integer */
