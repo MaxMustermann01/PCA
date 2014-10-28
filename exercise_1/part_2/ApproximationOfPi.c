@@ -18,23 +18,24 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "ApproximationOfPi.h"
 
-//Definition of function
+/* Definition of function */
 double f(double x)
 {
 	return 4 / (1 + x*x);
 }
 
-// Approximation of Pi via Summing n Rectangles
-double approximatePi(double n)
+/* Approximation of Pi via Summing n Rectangles */
+double approximatePi(int n)
 {
-	//Initializing Variables
+	/* Initializing Variables */
 	double sum = 0; 
 	int j;
 
-	//Width of a Rectangle
+	/* Width of a Rectangle */
 	double deltaX = 1.0/n;
-	//Current position
+	/* Current position */
 	double xi = 0;
 
 	for(j=0; j<=n; ++j)
@@ -43,20 +44,4 @@ double approximatePi(double n)
 		xi += deltaX;
 	}
 	return sum;
-}
-
-int main(int argc, char *argv[])
-{
-	if(argc == 2)
-	{
-		int n = atoi(argv[1]);
-		printf("Approximation of Pi is:%f \n", approximatePi(n));
-		return 0;
-	}
-	else
-	{
-		printf("Wrong number of arguments\n");
-		return EXIT_FAILURE;
-	}
-
 }
