@@ -1,0 +1,332 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\usepackage{fancyhdr} % Required for custom headers
+\usepackage{lastpage} % Required to determine the last page for the footer
+\usepackage{extramarks} % Required for headers and footers
+\usepackage[usenames,dvipsnames]{color} % Required for custom colors
+\usepackage{graphicx} % Required to insert images
+\usepackage{listings} % Required for insertion of code
+\usepackage{courier} % Required for the courier font
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1} % Line spacing
+
+% Set up the header and footer
+\pagestyle{fancy}
+%\lhead{\hmwkAuthorName} % Top left header
+\chead{\hmwkClass\ : \hmwkTitle} % Top center head
+\rhead{\firstxmark} % Top right header
+\lfoot{\lastxmark} % Bottom left footer
+\cfoot{} % Bottom center footer
+\rfoot{Page\ \thepage\ of\ \protect\pageref{LastPage}} % Bottom right footer
+\renewcommand\headrulewidth{0.4pt} % Size of the header rule
+\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+%----------------------------------------------------------------------------------------
+%	CODE INCLUSION CONFIGURATION
+%----------------------------------------------------------------------------------------
+
+\definecolor{MyDarkGreen}{rgb}{0.0,0.4,0.0} % This is the color used for comments
+\lstloadlanguages{Perl} % Load Perl syntax for listings, for a list of other languages supported see: ftp://ftp.tex.ac.uk/tex-archive/macros/latex/contrib/listings/listings.pdf
+\lstset{language=Perl, % Use Perl in this example
+        frame=single, % Single frame around code
+        basicstyle=\small\ttfamily, % Use small true type font
+        keywordstyle=[1]\color{Blue}\bf, % Perl functions bold and blue
+        keywordstyle=[2]\color{Purple}, % Perl function arguments purple
+        keywordstyle=[3]\color{Blue}\underbar, % Custom functions underlined and blue
+        identifierstyle=, % Nothing special about identifiers                                         
+        commentstyle=\usefont{T1}{pcr}{m}{sl}\color{MyDarkGreen}\small, % Comments small dark green courier font
+        stringstyle=\color{Purple}, % Strings are purple
+        showstringspaces=false, % Don't put marks in string spaces
+        tabsize=5, % 5 spaces per tab
+        %
+        % Put standard Perl functions not included in the default language here
+        morekeywords={rand},
+        %
+        % Put Perl function parameters here
+        morekeywords=[2]{on, off, interp},
+        %
+        % Put user defined functions here
+        morekeywords=[3]{test},
+       	%
+        morecomment=[l][\color{Blue}]{...}, % Line continuation (...) like blue comment
+        numbers=left, % Line numbers on left
+        firstnumber=1, % Line numbers start with line 1
+        numberstyle=\tiny\color{Blue}, % Line numbers are blue and small
+        stepnumber=5 % Line numbers go in steps of 5
+}
+
+% Creates a new command to include a perl script, the first parameter is the filename of the script (without .pl), the second parameter is the caption
+\newcommand{\perlscript}[2]{
+\begin{itemize}
+\item[]\lstinputlisting[caption=#2,label=#1]{#1.pl}
+\end{itemize}
+}
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT STRUCTURE COMMANDS
+%	Skip this unless you know what you're doing
+%----------------------------------------------------------------------------------------
+
+% Header and footer for when a page split occurs within a problem environment
+\newcommand{\enterProblemHeader}[1]{
+%\nobreak\extramarks{#1}{#1 continued on next page\ldots}\nobreak
+%\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+}
+
+% Header and footer for when a page split occurs between problem environments
+\newcommand{\exitProblemHeader}[1]{
+%\nobreak\extramarks{#1 (continued)}{#1 continued on next page\ldots}\nobreak
+%\nobreak\extramarks{#1}{}\nobreak
+}
+
+\setcounter{secnumdepth}{0} % Removes default section numbers
+\newcounter{homeworkProblemCounter} % Creates a counter to keep track of the number of problems
+
+\newcommand{\homeworkProblemName}{}
+\newenvironment{homeworkProblem}[1][Problem \arabic{homeworkProblemCounter}]{ % Makes a new environment called homeworkProblem which takes 1 argument (custom name) but the default is "Problem #"
+\stepcounter{homeworkProblemCounter} % Increase counter for number of problems
+\renewcommand{\homeworkProblemName}{#1} % Assign \homeworkProblemName the name of the problem
+\section{\homeworkProblemName} % Make a section in the document with the custom problem count
+%\enterProblemHeader{\homeworkProblemName} % Header and footer within the environment
+}{
+%\exitProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+\newcommand{\problemAnswer}[1]{ % Defines the problem answer command with the content as the only argument
+\noindent\framebox[\columnwidth][c]{\begin{minipage}{0.98\columnwidth}#1\end{minipage}} % Makes the box around the problem answer and puts the content inside
+}
+
+\newcommand{\homeworkSectionName}{}
+\newenvironment{homeworkSection}[1]{ % New environment for sections within homework problems, takes 1 argument - the name of the section
+\renewcommand{\homeworkSectionName}{#1} % Assign \homeworkSectionName to the name of the section from the environment argument
+\subsection{\homeworkSectionName} % Make a subsection with the custom name of the subsection
+%\enterProblemHeader{\homeworkProblemName\ [\homeworkSectionName]} % Header and footer within the environment
+}{
+%\enterProblemHeader{\homeworkProblemName} % Header and footer after the environment
+}
+
+%----------------------------------------------------------------------------------------
+%	NAME AND CLASS SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\hmwkTitle}{Übung\ \#1} % Assignment title
+\newcommand{\hmwkDueDate}{Dienstag,\ 28.\ Oktober\ 2014} % Due date
+\newcommand{\hmwkClass}{Parallel Computer Architecture} % Course/class
+\newcommand{\hmwkClassTime}{} % Class/lecture time
+\newcommand{\hmwkClassInstructor}{} % Teacher/lecturer
+\newcommand{\hmwkAuthorName}{Günther Schindler, Fabian Finkeldey, Shamna Shyju} % Your name
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title{
+\vspace{2in}
+\textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+\normalsize\vspace{0.1in}\small{Abgabe\ am\ \hmwkDueDate}\\
+\vspace{0.1in}\large{\textit{\hmwkClassTime}}
+\vspace{3in}
+}
+
+\author{\textbf{\hmwkAuthorName}}
+\date{} % Insert date here if you want it to appear below your name
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+
+%----------------------------------------------------------------------------------------
+%	TABLE OF CONTENTS
+%----------------------------------------------------------------------------------------
+
+%\setcounter{tocdepth}{1} % Uncomment this line if you don't want subsections listed in the ToC
+
+\newpage
+\tableofcontents
+\newpage
+
+%----------------------------------------------------------------------------------------
+%	Matrix-Vektor-Multiplikation
+%----------------------------------------------------------------------------------------
+
+% To have just one problem per page, simply put a \clearpage after each problem
+
+\begin{homeworkProblem}[Matrix-Vektor-Multiplikation]
+Im Zuge der ersten Übung ist ein Programm zur Matrix-Vektor-Multiplikation zu entwerfen.
+Nachfolgend werden Lösungen zu den einzelnen Anforderung dargestellt.
+\\
+Die gezeigten Funktionen basieren auf Multiplikationen mit integer Werten. Da die 
+Multiplikation ebenso mit double und float Werten vollzogen werden sollen, wurden
+hierfür ebenso Funktionen Implementiert.
+\\ \\
+Zunächst wird der, für die Matrizen verwendete, Datentyp vorgestellt. Via Typdefinition
+wird eine Struktur namens sMatrixInt erstellt. Ein Zeiger auf einen Zeiger gibt den
+jeweiligen Anfangspunkt der Matrix. Zusätzlich enthält die Struktur jeweils einen Wert für die
+Anzahl der Spalten und Zeilen.
+\begin{lstlisting}{c}
+typedef struct sMatrixInt
+{
+  int iRow;       // for rows
+  int iCol;       // for columns
+  int** ppaMat;   // int[][]
+} sMatrixInt;
+\end{lstlisting}
+
+Die Größe der Matrix (und damit auch des Vektors) soll über Kommandozeilenparameter
+übergeben werden. Dadurch müssen die Matrizen dynamisch variabel sein. Die Funktion
+vAllocMatrixInt() alloziiert den für die Matrix benötigten Speicherplatz anhand des
+übergebenen Zeilen- und Spaltenwertes.
+\begin{lstlisting}{c}
+int vAllocMatrixInt(sMatrixInt *pM, int iRow, int iCol)
+{ 
+  int i=0, iRet=0;
+  /* Init rows and cols in matrix structure */
+  pM->iCol=iCol;
+  pM->iRow=iRow;
+  /* Alloc Mem for Rows-Pointer */
+  pM->ppaMat = malloc(iRow * sizeof(int *));
+  if(NULL == pM->ppaMat)
+    iRet=1;
+  /* Allocate Memory for Rows */
+  for(i=0; i < iRow; i++)
+  {
+    pM->ppaMat[i] = malloc(iCol * sizeof(int *));
+    if(NULL == pM->ppaMat[i])
+      iRet=1;
+  }
+  return iRet;
+}
+\end{lstlisting}
+
+Damit der alloziierte Speicherplatz wieder freigegeben wird, wird die Funktion
+vFreeMatrixInt() verwendet.
+\begin{lstlisting}{c}
+void vFreeMatrixInt(sMatrixInt *pM)
+{
+  int i;
+  /* free the Rows */
+  for(i=0; i<pM->iRow; i++)
+    free(pM->ppaMat[i]);
+  /* free cols */
+  free(pM->ppaMat);
+}
+\end{lstlisting}
+
+Die zu multiplizierenden Matrizen sollen durch die rand() Funktion initialisiert werden.
+Die Funktion vInitMatrixInt() übernimmt diese Initialisierung anhand des übergeben 
+seed-Wertes, welcher bei Programmstart als Kommandozeilenparameter übergeben wird.
+\begin{lstlisting}{c}
+void vInitMatrixInt(sMatrixInt *pM, int iSeed)
+{
+  int i,j;
+  /* Initializes random number generator */
+  srand((unsigned) iSeed);
+  /* Fill the matrix-elements with random numbers */
+  /* matrix[zeile][spalte] */
+  for(i=0; i<pM->iRow; i++)
+  {
+    for(j=0; j<pM->iCol; j++)
+      /* Generate numbers fronm 0 to 50 */
+      pM->ppaMat[i][j]=rand();
+  }
+}
+\end{lstlisting}
+
+Die eigentliche Matrix-Vektor-Multiplikation übernimmt die Funktion vMatrixVecMulInt(),
+der Matrix und Vektor als Parameter übergeben werden.
+\begin{lstlisting}{c}
+void vMatrixVecMulInt(sMatrixInt *pM, sMatrixInt *pV, sMatrixInt *pVRes)
+{
+  int i,j;
+  
+  /* Multiplying matrix by vector (vector=matrix[x][0]) */
+  for(i=0; i<pM->iRow; i++)
+  {
+    pVRes->ppaMat[i][0]=0;
+    for(j=0; j<pM->iCol; j++)
+      pVRes->ppaMat[i][0] += pM->ppaMat[i][j] * pV->ppaMat[j][0];
+  }
+}
+\end{lstlisting}
+Schließlich sollen die Ausführungzeiten der Matrix-Vektor-Multiplikation gemessen werden.
+\\
+Diese Messung soll zum einem anhand der gettimeofday() Funktion realisert werden. Nachfolgende
+Implementierung der Funktionen dstartMesGTOD() (starten der Messung) und dstopMesGTOD()
+(stoppen der Messung), wurden basieren auf der gettimeofday() Funktion realisiert. Die
+gemessene Zeit wird als return-Wert zurückgegeben.
+\begin{lstlisting}{c}
+double dstartMesGTOD(void)
+{
+  struct timeval tim;
+  gettimeofday(&tim, NULL);
+  return tim.tv_sec+(tim.tv_usec/1000000.0);
+}
+
+double dstopMesGTOD(double dStartTime)
+{
+  struct timeval tim;
+  gettimeofday(&tim, NULL);
+  return (tim.tv_sec+(tim.tv_usec/1000000.0)) - dStartTime;
+}
+\end{lstlisting}
+Neben obiger Implementierung soll die Messung auch über den Assembler Befehl Read Time
+Stamp Counter (rdtsc) vollzogen werden. Wieder dient, wie folgend gezeigt, eine Funktion
+(ullstartMesRDTSC()) zum starten der Messung und eine Funktion (dstopMesRDTSC) zum stoppen
+der Messung. Da rdtsc() die Prozessorzyklen liefert, muss das Ergebniss noch durch die 
+Prozessorfrequenz (hier 2.2 GHz) geteilt werden.
+\begin{lstlisting}{c}
+unsigned long long ullstartMesRDTSC(void)
+{
+  return rdtsc();
+}
+
+double dstopMesRDTSC(unsigned long long ullStartTime)
+{
+  unsigned long long ullStopTime;
+  ullStopTime = rdtsc();
+  /* The denominator depends on the CPU freq. In my case it is 2.2 GHz */
+  /* To get the right value, run: lscpu on commandline */
+  return (double)(ullStopTime - ullStartTime) / 2200000000;
+}
+\end{lstlisting}
+
+%\begin{center}
+%\includegraphics[width=0.2\columnwidth]{dlatch_truth}
+%\end{center}
+\end{homeworkProblem}
+
+%Listing \ref{homework_example} shows a Perl script.
+
+%\perlscript{homework_example}{Sample Perl Script With Highlighting}
+
+%\lipsum[1]
+
+%----------------------------------------------------------------------------------------
+%	Pi-Näherungsverfahren
+%----------------------------------------------------------------------------------------
+%----------------------------------------------------------------------------------------
+\pagebreak
+\begin{homeworkProblem}[Pi-Näherungsverfahren]
+
+\end{homeworkProblem}
+
+\end{document}
