@@ -34,7 +34,7 @@ double dstopMesRDTSC(unsigned long long ullStartTime)
   ullStopTime = rdtsc();
   /* The denominator depends on the CPU freq. In my case it is 1.2 GHz */
   /* To get the right value, run: lscpu on commandline  */
-  return (double)(ullStopTime - ullStartTime) / 120000000;
+  return (double)(ullStopTime - ullStartTime) / 1200000000;
 }
 
 /* Start time-measurement */
