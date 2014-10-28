@@ -326,7 +326,40 @@ double dstopMesRDTSC(unsigned long long ullStartTime)
 %----------------------------------------------------------------------------------------
 \pagebreak
 \begin{homeworkProblem}[Pi-Näherungsverfahren]
-
+Um die Zahl Pi näherungsweise zu bestimmen, sollte folgendes Verfahren implementiert werden:\\
+\begin{equation}
+\sum_{i=0}^N F(x_i) \Delta x \approx \pi, \ wobei \ F(x)= \frac{4}{1+x^2}
+\end{equation}
+Dazu wurde die Funktion in c implementiert:
+\begin{lstlisting}{c}
+double f(double x)
+{
+	return 4 / (1 + x*x);
+}
+\end{lstlisting}
+Als Datentyp wurde double gewählt, um unnötige Approximierungsfehler zu vermeiden.\\
+Zur eigentlichen Näherung von Pi werden nun N+1 Funktionsauswertungen benötigt, die dann mit $\Delta x$ multipliziert und aufsummiert werden. Die $x_i$ werden dabei äquidistant auf dem Intervall von 0 bis 1 verteilt. Ihr Abstand beträgt per Definition $\Delta x$, wobei $\Delta x \ = \ \frac{1}{n+1}$ entspricht.\\
+Diese Vorgehensweise zeigt sich wie folgt in der Implementierung:\\
+\begin{lstlisting}{c}
+double approximatePi(int n)
+{
+	/* Initializing Variables */
+	double sum = 0;
+	int j;
+	
+	/* Width of a Rectangle */
+	double deltaX = 1.0/(n+1);
+	
+	/* Current position */
+	double xi = 0;
+	for(j=0; j<=n; ++j)
+	{
+		sum += f(xi)*deltaX;
+		xi += deltaX;
+	}
+	return sum;
+}
+\end{lstlisting}
 \end{homeworkProblem}
 
 \end{document}
