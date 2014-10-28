@@ -81,6 +81,9 @@ int main(int argc, char* argv[]){
   /* Write reslulting values in file, integer */
   writeTimeToFile(f,0,dElapsedTimeGTOD);
   writeTimeToFile(f,1,dElapsedTimeRDTSC);
+  printf("\n Time for calculation: \n");
+  printf("\n Integer : %lfs (GetTimeofDay())"
+         "\n           %lfs (rdtsc())\n", dElapsedTimeGTOD, dElapsedTimeRDTSC);
   
   /* Start time-measurement, double */
   dStartTimeGTOD = dstartMesGTOD();
@@ -93,6 +96,8 @@ int main(int argc, char* argv[]){
   /* Write reslulting values in file, integer */
   writeTimeToFile(f,2,dElapsedTimeGTOD);
   writeTimeToFile(f,3,dElapsedTimeRDTSC);
+  printf("\n Double  : %lfs (GetTimeofDay())"
+         "\n           %lfs (rdtsc())\n", dElapsedTimeGTOD, dElapsedTimeRDTSC);
   
   /* Start time-measurement, float */
   dStartTimeGTOD = dstartMesGTOD();
@@ -105,6 +110,8 @@ int main(int argc, char* argv[]){
   /* Write reslulting values in file, integer */
   writeTimeToFile(f,4,dElapsedTimeGTOD);
   writeTimeToFile(f,5,dElapsedTimeRDTSC);
+  printf("\n Float   : %lfs (GetTimeofDay())"
+         "\n           %lfs (rdtsc())\n", dElapsedTimeGTOD, dElapsedTimeRDTSC);
   
   /* Free Allocated Memory */
   /* integer */
