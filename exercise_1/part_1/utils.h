@@ -46,10 +46,14 @@
     (val) = ((((unsigned long long int)__upper)<<32)|((unsigned long long int)__lower)); \
 } while(0)
 #else
-#define rdtsc(val) do { \
-     unsigned int __a,__d; \
-      asm volatile("rdtsc" : "=a" (__a), "=d" (__d)); \
-     (val) = ((unsigned long long)__a) | (((unsigned long long)__d)<<32); \
-} while(0)
+/* 
+ * Workaround for the #define .. do{ .. } while(0) statement.
+ * Otherwise it won't compile with gcc. (Günther Schindler)
+ */
+static __inline__ unsigned long long rdtsc(void){
+     unsigned int __a,__d;
+      asm volatile("rdtsc" : "=a" (__a), "=d" (__d));
+     return ((unsigned long long)__a) | (((unsigned long long)__d)<<32);
+}
 #endif
 #endif
