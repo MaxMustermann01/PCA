@@ -34,7 +34,7 @@ double approximatePi(int n)
 	int j;
 
 	/* Width of a Rectangle */
-	double deltaX = 1.0/n;
+	double deltaX = 1.0/(n+1);
 	/* Current position */
 	double xi = 0;
 
