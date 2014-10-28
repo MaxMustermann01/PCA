@@ -72,11 +72,13 @@ int main(int argc, char* argv[]){
   
   /* Start time-measurement, integer */
   dStartTimeGTOD = dstartMesGTOD();
-  ullStartTimeRDTSC = ullstartMesRDTSC();
   /* Start multiplication, integer */
   vMatrixVecMulInt(&Mat_Int, &Vec_Int, &Res_Int);
   /* Stop time-measurement, integer */
   dElapsedTimeGTOD = dstopMesGTOD(dStartTimeGTOD);
+  
+  ullStartTimeRDTSC = ullstartMesRDTSC();
+  vMatrixVecMulInt(&Mat_Int, &Vec_Int, &Res_Int);
   dElapsedTimeRDTSC = dstopMesRDTSC(ullStartTimeRDTSC);
   /* Write reslulting values in file, integer */
   writeTimeToFile(f,0,dElapsedTimeGTOD);
@@ -87,11 +89,13 @@ int main(int argc, char* argv[]){
   
   /* Start time-measurement, double */
   dStartTimeGTOD = dstartMesGTOD();
-  ullStartTimeRDTSC = ullstartMesRDTSC();
   /* Start multiplication, double */
   vMatrixVecMulDouble(&Mat_Double, &Vec_Double, &Res_Double);
   /* Stop time-measurement, double */
   dElapsedTimeGTOD = dstopMesGTOD(dStartTimeGTOD);
+  
+  ullStartTimeRDTSC = ullstartMesRDTSC();
+  vMatrixVecMulDouble(&Mat_Double, &Vec_Double, &Res_Double);
   dElapsedTimeRDTSC = dstopMesRDTSC(ullStartTimeRDTSC);
   /* Write reslulting values in file, integer */
   writeTimeToFile(f,2,dElapsedTimeGTOD);
@@ -101,11 +105,13 @@ int main(int argc, char* argv[]){
   
   /* Start time-measurement, float */
   dStartTimeGTOD = dstartMesGTOD();
-  ullStartTimeRDTSC = ullstartMesRDTSC();
   /* Start multiplication, float */
   vMatrixVecMulFloat(&Mat_Float, &Vec_Float, &Res_Float);
   /* Stop time-measurement, double */
   dElapsedTimeGTOD = dstopMesGTOD(dStartTimeGTOD);
+  
+  ullStartTimeRDTSC = ullstartMesRDTSC();
+  vMatrixVecMulFloat(&Mat_Float, &Vec_Float, &Res_Float);
   dElapsedTimeRDTSC = dstopMesRDTSC(ullStartTimeRDTSC);
   /* Write reslulting values in file, integer */
   writeTimeToFile(f,4,dElapsedTimeGTOD);
