@@ -17,6 +17,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ApproximationOfPi.h"
+#include "time_measurement.h"
+#include <unistd.h>
 
 /* Approximates Pi with a given number of steps */
 int main(int argc, char *argv[])
@@ -25,7 +27,31 @@ int main(int argc, char *argv[])
 	if(argc == 2)
 	{
 		int n = atoi(argv[1]);
-		printf("Approximation of Pi is:%f \n", approximatePi(n));
+		double approxPi = 0;
+		double dStartTimeGTOD=0.0, dElapsedTimeGTOD=0.0;
+		unsigned long long ullStartTimeRDTSC=0.0;
+		double dElapsedTimeRDTSC=0.0;
+
+		/* Open a File for storing time-measurment-values */
+		FILE * f = OpenTimeFile();
+
+		/* Start time-measurement */
+  		dStartTimeGTOD = dstartMesGTOD();
+  		ullStartTimeRDTSC = ullstartMesRDTSC();	
+
+		/* Start Approximation */	
+		approxPi = approximatePi(n);
+
+		/* Stop time-measurement */
+		dElapsedTimeGTOD = dstopMesGTOD(dStartTimeGTOD);
+  		dElapsedTimeRDTSC = dstopMesRDTSC(ullStartTimeRDTSC);
+
+		/* Write reslulting values in file */
+ 		writeTimeToFile(f,0,dElapsedTimeGTOD);
+		writeTimeToFile(f,1,dElapsedTimeRDTSC);
+
+		/* Display value of Approximation */
+		printf("Approximation of Pi is:%f \n", approxPi);
 		return 0;
 	}
 	else
@@ -33,5 +59,7 @@ int main(int argc, char *argv[])
 		printf("Wrong number of arguments\n");
 		return EXIT_FAILURE;
 	}
+
+
 
 }

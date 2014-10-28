@@ -26,7 +26,7 @@ matvecmult :
 
 approximatepi :
 	$(CC) $(CFLAGS)	part_2/ApproximationOfPi.c \
-			part_2/ApproximationOfPi.h \
+			part_2/time_measurement.c \
 			part_2/main.c \
 			-o approximatepi
 
