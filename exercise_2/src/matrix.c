@@ -96,21 +96,14 @@ void vFillCircleMatrix(sMatrixDouble *pM, int iDiameter, double dValue)
     {
       a = i-x;
       b = j-y;
-      if((a*a+b*b)<=(iRadius*iRadius))
+      /* Set boundary points to 0.0 */
+      if(i==0  || i==pM->iRow-1 || j==0 || j==pM->iCol-1)
+        pM->ppaMat[i][j]=0.0;
+      else if((a*a+b*b)<=(iRadius*iRadius))
 	pM->ppaMat[i][j]=dValue;
     }
   }
 }
-
-// for i from 0 to 9 {
-//     for j from 0 to 9 {
-//         a = i - x
-//         b = j - y
-//         if a*a + b*b <= r*r {
-//             // Do something here
-//         }
-//     }
-// }
 
 void vFreeMatrixDouble(sMatrixDouble *pM)
 {
