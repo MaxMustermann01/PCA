@@ -19,8 +19,10 @@
 #include "matrix.h"
 #include "time_measurement.h"
 
-int main(int argc, char* argv[]){
-  int iSize, iDiameter, iHeat;
+int main(int argc, char* argv[])
+{
+  int iSize, iDiameter;
+  double dValue;
   sMatrixDouble sMgrid;
   double dStartTimeGTOD=0.0, dElapsedTimeGTOD=0.0;
   
@@ -37,7 +39,7 @@ int main(int argc, char* argv[]){
   /* Convert C-String to int */
   iSize = atoi(argv[1]);
   iDiameter = atoi(argv[2]);
-  iHeat = atoi(argv[3]);
+  dValue = atoi(argv[3]);
   
   /* Allocate memory for grid */
   if(iAllocMatrixDouble(&sMgrid, iSize, iSize))
@@ -46,11 +48,9 @@ int main(int argc, char* argv[]){
     exit(1);
   }
   
-  /* Initialize matrix with test values between 0 and 20 */
-  vInitMatrixDouble(&sMgrid,8);
   /* Print matrix before relaxation */
-  vPrintMatrixDouble(&sMgrid);
-  
+  //vPrintMatrixDouble(&sMgrid);
+  vFillCircleMatrix(&sMgrid, iDiameter, dValue);
   /* Start time-measurement, integer */
   dStartTimeGTOD = dstartMesGTOD();
   /* Make relaxation */

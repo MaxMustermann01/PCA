@@ -27,19 +27,29 @@ typedef struct sMatrixDouble
 } sMatrixDouble;
 
 /*
- * DESCRIPTION - 
- * PARAMETER   - sMatrixInt: pointer to a sMatrix type
+ * DESCRIPTION - does the relaxion
+ * PARAMETER   - sMatrixInt: pointer to a sMatrix type which should be iterated
  *
- *RETURN       - void 
+ * RETURN       - void 
  */
 void vRelaxMatrix(sMatrixDouble *);
+
+/*
+ * DESCRIPTION - Fill up a circle with numbers and with a given diameter.
+ * PARAMETER   - sMatrixInt: pointer to a sMatrix type in which the circle should
+ *                           be drawn
+ *               integer   : size of the diameter
+ *               double    : used value to fill the circle
+ * RETURN       - void 
+ */
+void vFillCircleMatrix(sMatrixDouble *, int, double);
 
 /*
  * DESCRIPTION - Allocate memory for the dynamic matrix;
  * PARAMETER   - sMatrixInt: pointer to a sMatrix type for which the memory will be allocated
  *             - Integer: matrix rows
  *             - Integer: matrix columns
- *RETURN       - Integer: 0 if alloc was ok, 1 if alloc failed 
+ * RETURN       - Integer: 0 if alloc was ok, 1 if alloc failed 
  */
 int iAllocMatrixDouble(sMatrixDouble *,int, int);
 

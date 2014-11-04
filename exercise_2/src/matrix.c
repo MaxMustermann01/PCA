@@ -82,6 +82,36 @@ void vRelaxMatrix(sMatrixDouble *pM)
   vFreeMatrixDouble(&sMTmp);
 }
 
+void vFillCircleMatrix(sMatrixDouble *pM, int iDiameter, double dValue)
+{
+  int i,j,x,y,a,b, iRadius;
+  
+  x=pM->iCol / 2;
+  y=pM->iRow / 2;
+  iRadius = iDiameter / 2;
+  
+  for(i=0; i<pM->iRow; i++)
+  {
+    for(j=0; j<pM->iCol; j++)
+    {
+      a = i-x;
+      b = j-y;
+      if((a*a+b*b)<=(iRadius*iRadius))
+	pM->ppaMat[i][j]=dValue;
+    }
+  }
+}
+
+// for i from 0 to 9 {
+//     for j from 0 to 9 {
+//         a = i - x
+//         b = j - y
+//         if a*a + b*b <= r*r {
+//             // Do something here
+//         }
+//     }
+// }
+
 void vFreeMatrixDouble(sMatrixDouble *pM)
 {
   int i;
@@ -115,7 +145,7 @@ void vPrintMatrixDouble(sMatrixDouble *pM)
   { 
     printf("\n");
     for(j=0; j<pM->iCol; j++)
-      printf("%8.2lf", pM->ppaMat[i][j]);
+      printf("%2.0lf", pM->ppaMat[i][j]);
   }
   printf("\n");
 }
