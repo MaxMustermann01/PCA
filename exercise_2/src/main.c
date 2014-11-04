@@ -24,10 +24,7 @@ int main(int argc, char* argv[])
   int iSize, iDiameter;
   double dValue;
   sMatrixDouble sMgrid;
-  double dStartTimeGTOD=0.0, dElapsedTimeGTOD=0.0;
-  
-  /* Open a File for storing time-measurment-values */
-  //FILE * f = OpenTimeFile();
+  //double dStartTimeGTOD=0.0, dElapsedTimeGTOD=0.0;
   
   /* Check integrity of arguments */
   if(argc!=4)
@@ -39,7 +36,7 @@ int main(int argc, char* argv[])
   /* Convert C-String to int */
   iSize = atoi(argv[1]);
   iDiameter = atoi(argv[2]);
-  dValue = atoi(argv[3]);
+  dValue = strtod(argv[3], NULL);
   
   /* Allocate memory for grid */
   if(iAllocMatrixDouble(&sMgrid, iSize, iSize))
@@ -52,11 +49,11 @@ int main(int argc, char* argv[])
   //vPrintMatrixDouble(&sMgrid);
   vFillCircleMatrix(&sMgrid, iDiameter, dValue);
   /* Start time-measurement, integer */
-  dStartTimeGTOD = dstartMesGTOD();
+    //dStartTimeGTOD = dstartMesGTOD();
   /* Make relaxation */
   vRelaxMatrix(&sMgrid);
   /* Stop time-measurement, integer */
-  dElapsedTimeGTOD = dstopMesGTOD(dStartTimeGTOD);
+    //dElapsedTimeGTOD = dstopMesGTOD(dStartTimeGTOD);
   
   /* Print matrix after relaxation */
   vPrintMatrixDouble(&sMgrid);

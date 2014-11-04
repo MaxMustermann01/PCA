@@ -10,7 +10,7 @@ II. Compilation
 ---------------
 In order to compile, use the Makefile:
 
-$ make ralaxation
+$ make relaxation
 
 To delete the compiled files:
 
@@ -20,6 +20,7 @@ III. Usage
 ----------
 Run the relaxation:
 
-$ matvecmult <MATRIX_SIZE> <DIAMETER> <HEAT>
+$ relaxation <MATRIX_SIZE> <DIAMETER> <HEAT>
 
-(The time measurement results will be printed to the standard output)
+(The calculated matrix will be printed to the std-output, so be careful with
+ the <MATRIX_SIZE>)

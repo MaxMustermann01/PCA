@@ -138,7 +138,7 @@ void vPrintMatrixDouble(sMatrixDouble *pM)
   { 
     printf("\n");
     for(j=0; j<pM->iCol; j++)
-      printf("%2.0lf", pM->ppaMat[i][j]);
+      printf("%6.1lf", pM->ppaMat[i][j]);
   }
   printf("\n");
 }
