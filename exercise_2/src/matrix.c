@@ -51,6 +51,37 @@ int iAllocMatrixDouble(sMatrixDouble *pM, int iRow, int iCol)
   return iRet;
 }
 
+void vRelaxMatrix(sMatrixDouble *pM)
+{
+  int i,j;
+  sMatrixDouble sMTmp;
+  /* Allocate memory for temporary matrix */
+  if(iAllocMatrixDouble(&sMTmp, pM->iRow, pM->iCol))
+  {
+    printf("DEBUG: Allocation failure!");
+    exit(1);
+  }
+  /* Copy each matrix element in the temporary matrix */
+  for(i=0; i<pM->iRow; i++)
+    for(j=0; j<pM->iCol; j++)
+      sMTmp.ppaMat[i][j]=pM->ppaMat[i][j];
+  /* Calculate new grid points */
+  for(i=0; i<pM->iRow; i++)
+    for(j=0; j<pM->iCol; j++)
+    {
+      /* Set boundary points to 0.0 */
+      if(i==0  || i==pM->iRow-1 || j==0 || j==pM->iCol-1)
+        pM->ppaMat[i][j]=0.0;
+      else
+      {
+	pM->ppaMat[i][j]=sMTmp.ppaMat[i][j];
+	pM->ppaMat[i][j]+=FI*((-4)*sMTmp.ppaMat[i][j]+sMTmp.ppaMat[i+1][j]+sMTmp.ppaMat[i-1][j]+sMTmp.ppaMat[i][j+1]+sMTmp.ppaMat[i][j-1]);
+      }
+    }
+  /* Delete temporary matrix again */
+  vFreeMatrixDouble(&sMTmp);
+}
+
 void vFreeMatrixDouble(sMatrixDouble *pM)
 {
   int i;
@@ -72,7 +103,7 @@ void vInitMatrixDouble(sMatrixDouble *pM, int iSeed)
   {
     for(j=0; j<pM->iCol; j++)
       /* Generate numbers fronm 0 to 50 */
-      pM->ppaMat[i][j]=(double)rand();
+      pM->ppaMat[i][j]=(double) (rand()%20);
   }
 }
 
@@ -84,7 +115,7 @@ void vPrintMatrixDouble(sMatrixDouble *pM)
   { 
     printf("\n");
     for(j=0; j<pM->iCol; j++)
-      printf("%5.2lf", pM->ppaMat[i][j]);
+      printf("%8.2lf", pM->ppaMat[i][j]);
   }
   printf("\n");
 }

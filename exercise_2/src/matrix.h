@@ -17,12 +17,22 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
+#define FI 0.24
+
 typedef struct sMatrixDouble
 {
   int iRow;       // for rows
   int iCol;       // for columns
   double** ppaMat;   // int[][]
 } sMatrixDouble;
+
+/*
+ * DESCRIPTION - 
+ * PARAMETER   - sMatrixInt: pointer to a sMatrix type
+ *
+ *RETURN       - void 
+ */
+void vRelaxMatrix(sMatrixDouble *);
 
 /*
  * DESCRIPTION - Allocate memory for the dynamic matrix;

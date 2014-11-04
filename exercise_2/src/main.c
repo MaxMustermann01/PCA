@@ -46,11 +46,20 @@ int main(int argc, char* argv[]){
     exit(1);
   }
   
+  /* Initialize matrix with test values between 0 and 20 */
+  vInitMatrixDouble(&sMgrid,8);
+  /* Print matrix before relaxation */
+  vPrintMatrixDouble(&sMgrid);
+  
   /* Start time-measurement, integer */
   dStartTimeGTOD = dstartMesGTOD();
-  // do something
+  /* Make relaxation */
+  vRelaxMatrix(&sMgrid);
   /* Stop time-measurement, integer */
   dElapsedTimeGTOD = dstopMesGTOD(dStartTimeGTOD);
+  
+  /* Print matrix after relaxation */
+  vPrintMatrixDouble(&sMgrid);
   
   /* Free Allocated Memory */
   vFreeMatrixDouble(&sMgrid);
