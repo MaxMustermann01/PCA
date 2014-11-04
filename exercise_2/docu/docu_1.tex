@@ -169,12 +169,106 @@
 %----------------------------------------------------------------------------------------
 
 \begin{homeworkProblem}[Relaxation]
-
-
-
-%\begin{lstlisting}{c}
-%\end{lstlisting}
-
+Für die zweite Übung ist ein Programm zu implementieren, welches den neuen Wert eines
+2D-Gitterpunktes als Mittelwert seiner vier Nachbarn und seines eigenen Wertes berechnet.
+\\
+Um eine NxN Gitterstruktur von Floating-Point Werten anzulegen, wird eine
+Matrix Struktur und die Typdefinition sMatrixDouble aus Übung 1 verwendet. Ebenso
+werden die Funktionen iAllocMatrixDouble() sowie vFreeMatrixDouble() aus Übung 1
+importiert.
+\\
+Zur Mittelwertberechnung eines 2D-Gitterpunktes wird die Funktion vRelaxMatrix()
+eingeführt. Diese verwendet eine temporäre Matrix (sMTmp) um die Elemente der
+eigentlich zu berechnenden Matrix (pM) zwischen zu speichern. Für die eigentliche
+Berechnung wird die in der Übung vorgestellte Gleichung verwendet. Die Randwerte
+werden auf 0.0 gesetzt.
+\begin{lstlisting}{c}
+void vRelaxMatrix(sMatrixDouble *pM)
+{
+  int i,j;
+  sMatrixDouble sMTmp;
+  /* Allocate memory for temporary matrix */
+  if(iAllocMatrixDouble(&sMTmp, pM->iRow, pM->iCol))
+  {
+    printf("DEBUG: Allocation failure!");
+    exit(1);
+  }
+  /* Copy each matrix element in the temporary matrix */
+  for(i=0; i<pM->iRow; i++)
+    for(j=0; j<pM->iCol; j++)
+      sMTmp.ppaMat[i][j]=pM->ppaMat[i][j];
+  /* Calculate new grid points */
+  for(i=0; i<pM->iRow; i++)
+    for(j=0; j<pM->iCol; j++)
+    {
+      /* Set boundary points to 0.0 */
+      if(i==0  || i==pM->iRow-1 || j==0 || j==pM->iCol-1)
+        pM->ppaMat[i][j]=0.0;
+      else
+      {
+        pM->ppaMat[i][j]=sMTmp.ppaMat[i][j];
+        pM->ppaMat[i][j]+=FI*((-4)*sMTmp.ppaMat[i][j] \
+                        +sMTmp.ppaMat[i+1][j]       \
+                        +sMTmp.ppaMat[i-1][j]       \
+                        +sMTmp.ppaMat[i][j+1]       \
+                        +sMTmp.ppaMat[i][j-1]);
+      }
+    }
+  /* Delete temporary matrix again */
+  vFreeMatrixDouble(&sMTmp);
+}
+\end{lstlisting}
+Zusätzlich soll eine Funktion implementiert werden, welche in der Mitte des Gitterfeldes
+einen Kreis mit variablen Durchmesser mit einem variable Wert initialisiert. 
+\\
+Für diese Funktionalität wurde die Funktion vFillCircleMatrix() implementiert. Diese
+füllt, ausgehend von der Mitte der Matrix (pM), einen Kreis mit dem Durchmesser
+iDiameter mit den Werten dValue. Die Randpunkte werden wieder auf 0.0 gesetzt.
+\begin{lstlisting}{c}
+void vFillCircleMatrix(sMatrixDouble *pM, int iDiameter, double dValue)
+{
+  int i,j,x,y,a,b, iRadius;
+  
+  x=pM->iCol / 2;
+  y=pM->iRow / 2;
+  iRadius = iDiameter / 2;
+  
+  for(i=0; i<pM->iRow; i++)
+  {
+    for(j=0; j<pM->iCol; j++)
+    {
+      a = i-x;
+      b = j-y;
+      /* Set boundary points to 0.0 */
+      if(i==0  || i==pM->iRow-1 || j==0 || j==pM->iCol-1)
+        pM->ppaMat[i][j]=0.0;
+      else if((a*a+b*b)<=(iRadius*iRadius))
+	pM->ppaMat[i][j]=dValue;
+    }
+  }
+}
+\end{lstlisting}
+Beispielhaft sieht nun eine Matrix mit Größe 17x17, einem Durchmesser von 12 und 
+einem Setzwert von 5 nach Relaxation wie folgt aus:
+\begin{lstlisting}{c}
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 1 1 2 1 2 1 1 0 0 0 0 0
+ 0 0 0 0 2 3 4 4 5 4 4 3 2 0 0 0 0
+ 0 0 0 2 3 5 5 5 5 5 5 5 3 2 0 0 0
+ 0 0 1 3 5 5 5 5 5 5 5 5 5 3 1 0 0
+ 0 0 1 4 5 5 5 5 5 5 5 5 5 4 1 0 0
+ 0 0 2 4 5 5 5 5 5 5 5 5 5 4 2 0 0
+ 0 1 1 5 5 5 5 5 5 5 5 5 5 5 1 1 0
+ 0 0 2 4 5 5 5 5 5 5 5 5 5 4 2 0 0
+ 0 0 1 4 5 5 5 5 5 5 5 5 5 4 1 0 0
+ 0 0 1 3 5 5 5 5 5 5 5 5 5 3 1 0 0
+ 0 0 0 2 3 5 5 5 5 5 5 5 3 2 0 0 0
+ 0 0 0 0 2 3 4 4 5 4 4 3 2 0 0 0 0
+ 0 0 0 0 0 1 1 2 1 2 1 1 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+\end{lstlisting}
 %\begin{center}
 %\includegraphics[width=0.2\columnwidth]{dlatch_truth}
 %\end{center}
