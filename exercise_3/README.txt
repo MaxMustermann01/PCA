@@ -18,7 +18,7 @@ $ make clean
 
 III. Usage
 ----------
-Run the nbody:
+Run the nbody: 
 
 $ nbody <CountOfMassPoints>
 
