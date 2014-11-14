@@ -20,5 +20,5 @@ III. Usage
 ----------
 Run the nbody:
 
-$ relaxation <CountOfMassPoints>
+$ nbody <CountOfMassPoints>
 
