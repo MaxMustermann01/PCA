@@ -18,10 +18,11 @@ CFLAGS = -Wall
 
 #CFLAGS += -O1
 
-relaxation :
-	$(CC) $(CFLAGS)	src/main.c \
+nbody :
+	$(CC) $(CFLAGS)	
 			src/nbody.c \
 			src/time_measurement.c \
+			src/main.c \
 			-o nbody
 
 clean :

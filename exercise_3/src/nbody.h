@@ -17,6 +17,8 @@
 #ifndef NBODY_H
 #define NBODY_H
 
+#define G 0.00000000006673
+
 typedef struct sMassPoint
 {
   double dVelocityX;
@@ -27,19 +29,21 @@ typedef struct sMassPoint
 } sMassPoint;
 
 /*
- * DESCRIPTION - Creates a given Number of masspoints
+ * DESCRIPTION - Creates a given Number of masspoints with random
+ *               Position and Mass
  * PARAMETER   - Integer: Number of masspoints to create
- *
+ *             - Integer: Maximum Value for Position and Mass
  * RETURN       - sMassPoint*: All created masspoints 
  */
-sMassPoint* sInitMassPoints(int);
+sMassPoint* sInitMassPoints(int, int);
 
 /*
  * DESCRIPTION - Simulates Interaction between two given MassPoints
  *	         and applies the changes in Velocity
  * PARAMETER   - sMassPoint*, sMassPoint* 
+ *               Integer: Timestep delta T
  */
-void vApplyForces(sMassPoint*, sMassPoint*);
+void vApplyForces(sMassPoint*, sMassPoint*, int);
 
 /*
  * DESCRIPTION - Changes Position according to the current
@@ -47,6 +51,24 @@ void vApplyForces(sMassPoint*, sMassPoint*);
  * PARAMETER   - sMassPoint*, int timestep
  */
 void vUpdatePosition(sMassPoint*, int);
+
+/*
+ * DESCRIPTION - Prints all values of a MassPoint
+ * PARAMETER   - sMassPoint*
+ */
+void vPrintMassPoint(sMassPoint*);
+
+/*
+ * DESCRIPTION - Executes the nBody Simulation with a given Number
+ * 		 of Masspoints, iterations, and timesteps.
+ *
+ * PARAMETER   - Integer: Number of masspoints to create
+ * 	       - Integer: Iterations to do
+ *             - Integer: Time between every Iteration
+ *             - Integer: Maximum Value for Position and Mass
+ * RETURN       - sMassPoint*: All created masspoints after Simulation
+ */
+sMassPoint* vSimulate(int, int, int, int);
 
 #endif
 

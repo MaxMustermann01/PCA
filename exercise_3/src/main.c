@@ -18,3 +18,21 @@
 #include <stdlib.h>
 #include "nbody.h"
 #include "time_measurement.h"
+
+int main(int argc, char* argv[])
+{
+  if(argc != 2)
+  {
+    printf("Invalid number of Arguments. Please enter ./nbody <numberOfMassPoints>");
+  }
+  else
+  {
+    /*
+     * numberOfMassPoints, iterations, timestep, maxValue for mass and position 
+     * Choose large timestep to see an significant position cange
+     */
+    vSimulate(atoi(argv[1]), 100, 100, 25000);
+  }  
+
+  return EXIT_SUCCESS;
+}
