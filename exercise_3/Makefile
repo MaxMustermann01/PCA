@@ -19,11 +19,8 @@ CFLAGS = -Wall
 #CFLAGS += -O1
 
 nbody :
-	$(CC) $(CFLAGS)	
+	$(CC) $(CFLAGS)	src/main.c \
 			src/nbody.c \
-			src/time_measurement.c \
-			src/main.c \
 			-o nbody
-
 clean :
 	rm -f nbody

@@ -11,40 +11,13 @@
  *                  Fabian Finkeldey (Fabian@Finkeldey-hm.de)
  *                  Günther Schindler (G.Schindler@stud.uni-heidelberg.de)
  *
- * LAST CHANGE      14. Nov 2014
+ * LAST CHANGE      18. Nov 2014
  * 
  ********************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include "nbody.h"
-#include "main.c"
 
-/*
- * ToDo: Organized Output to Screen or file
- * ToDo: Validate function 
- * ToDo: Better (random) Values on Mass and Position:
- *       Small masses and huge distance between massPoints
- *       results in small changes in position, so its likely
- *       to miss them in the output!
- */
-
-/*
-* Main Idea: Loop over all Masspoints:
-* Do pairwise ApplyForces for the current Masspoint with all following masspoints.
-* Example:
-* May the masspoints are named a, b, c, d:
-* Do (a, b), (a, c), (a, d)
-* Do (b, c), (c, d)
-* Do (c, d)
-* Since ApplyForces applies the Force to both given Points,
-* (a, b) is equal to (b, a) and therefore it's not necessary
-* to repeat this step in following iterations.
-* ApplyForce will update the Velocity of both given Masspoints
-* with the calculated delta.
-*
-* After applying all forces and updating all velocities,
-* updatePosition of all MP's to simulate the next timestep
-*/
 
 sMassPoint* sInitMassPoints(int n, int maxValue)
 {
@@ -120,14 +93,10 @@ void vPrintMassPoint(sMassPoint* massPoint)
 
 sMassPoint* vSimulate(int numberOfMassPoints, int iterations, int timestep, int maxValue)
 {
+  
   //Initialize all MassPoints
   sMassPoint* massPoints = sInitMassPoints(numberOfMassPoints, maxValue);  
   int n = 0;
-  
-  //Debug
-  int s = 0;
-  for(s; s<numberOfMassPoints; s++)
-    vPrintMassPoint(&massPoints[s]);
   
   //Do all iterations
   for(n; n<iterations; n++)
@@ -156,17 +125,16 @@ sMassPoint* vSimulate(int numberOfMassPoints, int iterations, int timestep, int 
       vUpdatePosition(&massPoints[k], timestep);
     }
     
-    //Debug
-    /*
-    vPrintMassPoint(&massPoints[1]);
-    printf("Iteration %d complete \n ************************************** \n \n", (n+1));
-    */
+
   }
   
-  //Debug
-  printf("################################# \n");
-  s = 0;
-  for(s; s<numberOfMassPoints; s++)
-    vPrintMassPoint(&massPoints[s]);
+  //Debug: Display some Data to ensure that everthing is working
+  printf("\n************************************************\n");
+  printf("This Programm will do %d Iterations with a timescale of %d \n", iterations, timestep);
+  printf("To show the effect, a sample point will be displayed after the simulation. \n");
+  printf("Starting Simulation... with vx = vy = 0.0 for all Points \n \n");
+  vPrintMassPoint(&massPoints[1]);
+  printf("%d Iterations complete \n************************************************ \n \n", n);
+  
   return massPoints;
 }
