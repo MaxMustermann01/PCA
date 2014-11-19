@@ -37,8 +37,8 @@ int main(int argc, char* argv[]){
   /* Convert C-String to integer */
   iSize = atoi(argv[1]);
   iNumThreads = atoi(argv[2]);
-  iMode = atoi(argv[3]);
-  iIterations = atoi(argv[4]);
+  iIterations = atoi(argv[3]);
+  iMode = atoi(argv[4]);
   
   if(iMode==1)
   {
