@@ -40,7 +40,7 @@ typedef struct sMatrixFloat
 
 sMatrixInt Mat_Int, Vec_Int, Res_Int;
 sMatrixDouble Mat_Double, Vec_Double, Res_Double;
-sMatrixInt Mat_Float, Vec_Float, Res_Float;
+sMatrixFloat Mat_Float, Vec_Float, Res_Float;
 int iNumThreads;
 
 /* 

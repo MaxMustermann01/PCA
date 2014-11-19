@@ -122,9 +122,9 @@ int main(int argc, char* argv[]){
         {
           printf("ERROR: Couldn't create thread\n");
           free(threads);
-          vFreeMatrixDouble(&Mat_Int);
-          vFreeMatrixDouble(&Vec_Int);
-          vFreeMatrixDouble(&Res_Int);
+          vFreeMatrixDouble(&Mat_Double);
+          vFreeMatrixDouble(&Vec_Double);
+          vFreeMatrixDouble(&Res_Double);
           exit(-1);
         }
       }
@@ -179,9 +179,9 @@ int main(int argc, char* argv[]){
         {
           printf("ERROR: Couldn't create thread\n");
           free(threads);
-          vFreeMatrixFloat(&Mat_Int);
-          vFreeMatrixFloat(&Vec_Int);
-          vFreeMatrixFloat(&Res_Int);
+          vFreeMatrixFloat(&Mat_Float);
+          vFreeMatrixFloat(&Vec_Float);
+          vFreeMatrixFloat(&Res_Float);
           exit(-1);
         }
       }
