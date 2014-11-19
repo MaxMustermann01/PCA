@@ -21,24 +21,24 @@
 #include "time_measurement.h"
 
 #define SEED 4
-#define ITERATIONS 20
 
 int main(int argc, char* argv[]){
   pthread_t * threads;    // pointer to a group of threads
-  int iSize=0, iMode=0, i, j, k;
+  int iSize=0, iMode=0, i, j, k, iIterations;
   double dStartTime=0.0, dElapsedTimeSer=0.0, dElapsedTimePar=0.0;
   
   /* Check integrity of arguments */
-  if(argc!=4)
+  if(argc!=5)
   {
     printf("\nWrong number of arguments. Check usage!"
-           " \nmatrix_vector_mult <MATRIX_SIZE> <NUM_THREADS> <MODE>\n");
+           " \nmatrix_vector_mult <MATRIX_SIZE> <NUM_THREADS> <NUM_ITERATIONS> <MODE>\n");
     return EXIT_FAILURE;
   }
   /* Convert C-String to integer */
   iSize = atoi(argv[1]);
   iNumThreads = atoi(argv[2]);
   iMode = atoi(argv[3]);
+  iIterations = atoi(argv[4]);
   
   if(iMode==1)
   {
@@ -57,7 +57,7 @@ int main(int argc, char* argv[]){
     /* Start time-measurement, parallel multiply*/
     dStartTime = dstartMesGTOD();
     /* Start multiplication */
-    for(j = 0; j < ITERATIONS; j++)
+    for(j = 0; j < iIterations; j++)
     {
       for(i = 1; i < iNumThreads; i++)
       {
@@ -78,7 +78,7 @@ int main(int argc, char* argv[]){
         pthread_join(threads[k], NULL);
     }
     /* Stop time-measurement, integer */
-    dElapsedTimePar = dstopMesGTOD(dStartTime) / ITERATIONS;
+    dElapsedTimePar = dstopMesGTOD(dStartTime) / iIterations;
   
     /* Write reslulting values in file, integer */
     printf("\n Time for calculation (Intger): \n");
@@ -86,9 +86,9 @@ int main(int argc, char* argv[]){
     
     /* Start time-measurement, parallel multiply*/
     dStartTime = dstartMesGTOD();
-    for(j = 0; j < ITERATIONS; j++)
+    for(j = 0; j < iIterations; j++)
       vMatrixVecMulIntSer();
-    dElapsedTimeSer = dstopMesGTOD(dStartTime) / ITERATIONS;
+    dElapsedTimeSer = dstopMesGTOD(dStartTime) / iIterations;
     
     printf(" Seriell  : %lfs \n", dElapsedTimeSer);
     printf(" Speed-Up : %lf \n", dElapsedTimeSer/dElapsedTimePar);
@@ -114,7 +114,7 @@ int main(int argc, char* argv[]){
     /* Start time-measurement, parallel multiply*/
     dStartTime = dstartMesGTOD();
     /* Start multiplication */
-    for(j = 0; j < ITERATIONS; j++)
+    for(j = 0; j < iIterations; j++)
     {
       for(i = 1; i < iNumThreads; i++)
       {
@@ -135,7 +135,7 @@ int main(int argc, char* argv[]){
         pthread_join(threads[k], NULL);
     }
     /* Stop time-measurement */
-    dElapsedTimePar = dstopMesGTOD(dStartTime) / ITERATIONS;
+    dElapsedTimePar = dstopMesGTOD(dStartTime) / iIterations;
   
     /* Write reslulting values in file */
     printf("\n Time for calculation (Double): \n");
@@ -143,9 +143,9 @@ int main(int argc, char* argv[]){
     
     /* Start time-measurement, parallel multiply*/
     dStartTime = dstartMesGTOD();
-    for(j = 0; j < ITERATIONS; j++)
+    for(j = 0; j < iIterations; j++)
       vMatrixVecMulDoubleSer();
-    dElapsedTimeSer = dstopMesGTOD(dStartTime) / ITERATIONS;
+    dElapsedTimeSer = dstopMesGTOD(dStartTime) / iIterations;
     
     printf(" Seriell  : %lfs \n", dElapsedTimeSer);
     printf(" Speed-Up : %lf \n", dElapsedTimeSer/dElapsedTimePar);
@@ -171,7 +171,7 @@ int main(int argc, char* argv[]){
     /* Start time-measurement, parallel multiply*/
     dStartTime = dstartMesGTOD();
     /* Start multiplication */
-    for(j = 0; j < ITERATIONS; j++)
+    for(j = 0; j < iIterations; j++)
     {
       for(i = 1; i < iNumThreads; i++)
       {
@@ -192,7 +192,7 @@ int main(int argc, char* argv[]){
         pthread_join(threads[k], NULL);
     }
     /* Stop time-measurement */
-    dElapsedTimePar = dstopMesGTOD(dStartTime) / ITERATIONS;
+    dElapsedTimePar = dstopMesGTOD(dStartTime) / iIterations;
   
     /* Write reslulting values in file */
     printf("\n Time for calculation (Float): \n");
@@ -200,9 +200,9 @@ int main(int argc, char* argv[]){
     
     /* Start time-measurement, parallel multiply*/
     dStartTime = dstartMesGTOD();
-    for(j = 0; j < ITERATIONS; j++)
+    for(j = 0; j < iIterations; j++)
       vMatrixVecMulFloatSer();
-    dElapsedTimeSer = dstopMesGTOD(dStartTime) / ITERATIONS;
+    dElapsedTimeSer = dstopMesGTOD(dStartTime) / iIterations;
     
     printf(" Seriell  : %lfs \n", dElapsedTimeSer);
     printf(" Speed-Up : %lf \n", dElapsedTimeSer/dElapsedTimePar);
