@@ -31,7 +31,7 @@ int main(int argc, char* argv[]){
   if(argc!=5)
   {
     printf("\nWrong number of arguments. Check usage!"
-           " \nmatrix_vector_mult <MATRIX_SIZE> <NUM_THREADS> <NUM_ITERATIONS> <MODE>\n");
+           " \nmat_mult <MATRIX_SIZE> <NUM_THREADS> <NUM_ITERATIONS> <MODE>\n");
     return EXIT_FAILURE;
   }
   /* Convert C-String to integer */
