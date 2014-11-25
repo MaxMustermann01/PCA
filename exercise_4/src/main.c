@@ -11,12 +11,13 @@
  *                  Fabian Finkeldey (Fabian@Finkeldey-hm.de)
  *                  Günther Schindler (G.Schindler@stud.uni-heidelberg.de)
  *
- * LAST CHANGE      19. Nov 2014
+ * LAST CHANGE      25. Nov 2014
  * 
  ********************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <stdint.h>
 #include "matrix_vector_mult.h"
 #include "time_measurement.h"
 
@@ -61,7 +62,7 @@ int main(int argc, char* argv[]){
     {
       for(i = 1; i < iNumThreads; i++)
       {
-        if(pthread_create(&threads[i], NULL, (void *)vMatrixVecMulIntPar, (void *) i) != 0)
+        if(pthread_create(&threads[i], NULL, (void *)vMatrixVecMulIntPar, (void *) (intptr_t)i) != 0)
         {
           printf("ERROR: Couldn't create thread\n");
           free(threads);
@@ -118,7 +119,7 @@ int main(int argc, char* argv[]){
     {
       for(i = 1; i < iNumThreads; i++)
       {
-        if(pthread_create(&threads[i], NULL, (void *)vMatrixVecMulDoublePar, (void *) i) != 0)
+        if(pthread_create(&threads[i], NULL, (void *)vMatrixVecMulDoublePar, (void *) (intptr_t)i) != 0)
         {
           printf("ERROR: Couldn't create thread\n");
           free(threads);
@@ -175,7 +176,7 @@ int main(int argc, char* argv[]){
     {
       for(i = 1; i < iNumThreads; i++)
       {
-        if(pthread_create(&threads[i], NULL, (void *)vMatrixVecMulFloatPar, (void *) i) != 0)
+        if(pthread_create(&threads[i], NULL, (void *)vMatrixVecMulFloatPar, (void *) (intptr_t)i) != 0)
         {
           printf("ERROR: Couldn't create thread\n");
           free(threads);

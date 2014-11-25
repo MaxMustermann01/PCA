@@ -11,18 +11,17 @@
  *                  Fabian Finkeldey (Fabian@Finkeldey-hm.de)
  *                  Günther Schindler (G.Schindler@stud.uni-heidelberg.de)
  *
- * LAST CHANGE      19. Nov 2014
+ * LAST CHANGE      25. Nov 2014
  * 
  ********************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include "matrix_vector_mult.h"
 
 void vMatrixVecMulIntSer(void)
 {
   int i,j;
-  
-  /* Multiplying matrix by vector (vector=matrix[x][0]) */
   for(i=0; i<Mat_Int.iRow; i++)
   {
     Res_Int.ppaMat[i][0]=0;
@@ -34,11 +33,10 @@ void vMatrixVecMulIntSer(void)
 void vMatrixVecMulIntPar(int *slice)
 {
   int i,j;
-  int s = (int) slice;
+  int s = (intptr_t) slice;
   int iFrom = (s * Mat_Int.iRow)/iNumThreads;
   int iTo = ((s+1) * Mat_Int.iRow)/iNumThreads;
   
-  /* Multiplying matrix by vector (vector=matrix[x][0]) */
   for(i = iFrom; i < iTo; i++)
   {
     Res_Int.ppaMat[i][0]=0;
@@ -63,7 +61,7 @@ void vMatrixVecMulDoubleSer(void)
 void vMatrixVecMulDoublePar(int *slice)
 {
   int i,j;
-  int s = (int) slice;
+  int s = (intptr_t) slice;
   int iFrom = (s * Mat_Double.iRow)/iNumThreads;
   int iTo = ((s+1) * Mat_Double.iRow)/iNumThreads;
   
@@ -92,7 +90,7 @@ void vMatrixVecMulFloatSer(void)
 void vMatrixVecMulFloatPar(int *slice)
 {
   int i,j;
-  int s = (int) slice;
+  int s = (intptr_t) slice;
   int iFrom = (s * Mat_Float.iRow)/iNumThreads;
   int iTo = ((s+1) * Mat_Float.iRow)/iNumThreads;
   
