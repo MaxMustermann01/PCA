@@ -61,5 +61,6 @@ double approximatePiPar(int iIterations)
   {
     sum += (f(i*deltaX)*deltaX);
   }
+
   return sum;
 }

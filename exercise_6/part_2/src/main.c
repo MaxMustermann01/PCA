@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ApproximationOfPi.h"
+#include <omp.h>
 #include <unistd.h>
 
 /* Approximates Pi with a given number of steps */
@@ -26,17 +27,24 @@ int main(int argc, char *argv[])
 	if(argc == 2)
 	{
 		int n = atoi(argv[1]);
-		double approxPiSer = 0;
-		double approxPiPar = 0;
+		double dApproxPiSer = 0.0;
+		double dApproxPiPar = 0.0;
+		double dSerTime = 0.0;
+		double dParTime = 0.0;
 
-		/* Start Approximation */	
-		approxPiSer = approximatePiSer(n);
-		approxPiPar = approximatePiPar(n);
-
+		// Start Approximation and measure time	
+		dSerTime = omp_get_wtime();
+		dApproxPiSer = approximatePiSer(n);
+		dSerTime = omp_get_wtime() - dSerTime;
+		
+		dParTime = omp_get_wtime();
+		dApproxPiPar = approximatePiPar(n);
+		dParTime = omp_get_wtime() - dParTime;
 		
 		/* Display value of Approximation */
-		printf("\nSerial Calculation: Approximation of Pi is: %f \n", approxPiSer);
-		printf("Parallel Calculation: Approximation of Pi is: %f \n", approxPiPar);
+		printf("\n%d Iterations done: \n", n);
+		printf("Serial  : Approximated Pi to %f in %fs \n", dApproxPiSer, dSerTime);
+		printf("Parallel: Approximated Pi to %f in %fs \n \n", dApproxPiPar, dParTime);
 		return 0;
 	}
 	else
