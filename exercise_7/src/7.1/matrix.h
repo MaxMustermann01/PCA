@@ -44,7 +44,7 @@ void vRelaxMatrixSer(void);
  *
  * RETURN      - void 
  */
-void vRelaxMatrixPar(int *);
+void vRelaxMatrixPar(int);
 
 /*
  * DESCRIPTION - Fill up a circle with numbers and with a given diameter.

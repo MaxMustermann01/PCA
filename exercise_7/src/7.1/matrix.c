@@ -80,10 +80,10 @@ void vRelaxMatrixSer()
     }
 }
 
-void vRelaxMatrixPar(int *slice)
+void vRelaxMatrixPar(int slice)
 {
   int i,j;
-  int s = (intptr_t) slice;
+  int s = slice;
   int iFrom = (s * sMgrid.iRow)/iNumThreads;
   int iTo = ((s+1) * sMgrid.iRow)/iNumThreads;
 
