@@ -26,8 +26,7 @@
 #define HEATVAL 66
 
 int main(int argc, char* argv[]){
-  pthread_t * threads;    // pointer to a group of threads
-  int i, j, k, iIterations;
+  int j, iIterations;
   double dStartTime=0.0, dElapsedTimeSer=0.0, dElapsedTimePar=0.0;
   
   /* Check integrity of arguments */
@@ -40,41 +39,36 @@ int main(int argc, char* argv[]){
   /* Convert C-String to integer */
   iNumThreads = atoi(argv[1]);
   iIterations = atoi(argv[2]);
+  index = 0;
   
     /* Allocate memory for grid */
-  if(iAllocMatrixDouble(&sMgrid, SIZE, SIZE))
+  if(iAllocMatrixDouble(&sMgrid[0], SIZE, SIZE))
   {
     printf("ERROR: Allocation failure!");
     exit(1);
   }
   
   /* Allocate memory for temporary matrix */
-  if(iAllocMatrixDouble(&sMTmp, SIZE, SIZE))
+  if(iAllocMatrixDouble(&sMgrid[1], SIZE, SIZE))
   {
     printf("ERROR: Allocation failure!");
     exit(1);
   }
   
   /* Initialize Grid */
-  vFillCircleMatrix(&sMgrid, DIAMETER, HEATVAL);
+  vFillCircleMatrix(&sMgrid[index], DIAMETER, HEATVAL);
   
   /* Start time-measurement, parallel multiply*/
   dStartTime = dstartMesGTOD();
   /* Start multiplication */
   for(j = 0; j < iIterations; j++)
   {
-    /* Copy each matrix element in the temporary matrix */
-    for(i=0; i<sMgrid.iRow; i++)
-      for(k=0; k<sMgrid.iCol; k++)
-        sMTmp.ppaMat[i][k]=sMgrid.ppaMat[i][k];
-    
-    for(i = 1; i < iNumThreads; i++)
-    {
-      #pragma omp parallel num_threads(iNumThreads)
-      vRelaxMatrixPar(omp_get_thread_num());
-    }
+    #pragma omp parallel num_threads(iNumThreads)
+    vRelaxMatrixPar(omp_get_thread_num());
+      
     /* Barrier, to avoid race conditions */
     #pragma omp barrier
+    index = 1 - index;
   }
   /* Stop time-measurement, integer */
   dElapsedTimePar = dstopMesGTOD(dStartTime) / iIterations;
@@ -84,12 +78,15 @@ int main(int argc, char* argv[]){
   printf("\n Parallel       : %lfs \n", dElapsedTimePar);
   
   /* Initialize Grid */
-  vFillCircleMatrix(&sMgrid, DIAMETER, HEATVAL);
+  vFillCircleMatrix(&sMgrid[index], DIAMETER, HEATVAL);
     
   /* Start time-measurement for serial relaxation */
   dStartTime = dstartMesGTOD();
   for(j = 0; j < iIterations; j++)
+  {
     vRelaxMatrixSer();
+    index = 1 - index;
+  }
   dElapsedTimeSer = dstopMesGTOD(dStartTime) / iIterations;
     
   printf(" Serial         : %lfs \n\n", dElapsedTimeSer);
@@ -97,7 +94,7 @@ int main(int argc, char* argv[]){
   printf(" Speed-Up       : %lf \n", dElapsedTimeSer/dElapsedTimePar);
   
   /* Free Allocated Memory */
-  vFreeMatrixDouble(&sMgrid);
-  vFreeMatrixDouble(&sMTmp);
+  vFreeMatrixDouble(&sMgrid[0]);
+  vFreeMatrixDouble(&sMgrid[1]);
   return EXIT_SUCCESS;
 }

@@ -5,13 +5,13 @@
  *                  the Parallel Computer Architecture (PCA) lecture of the 
  *                  University of Heidelberg.
  * 
- *                  Exercise 5 - Header-File the Matrix-handling
+ *                  Exercise 7 - Header-File the Matrix-handling
  * 
  * AUTHORS          Shamna Shyju (shamnashyju@googlemail.com)
  *                  Fabian Finkeldey (Fabian@Finkeldey-hm.de)
  *                  Günther Schindler (G.Schindler@stud.uni-heidelberg.de)
  *
- * LAST CHANGE      29. Nov 2014
+ * LAST CHANGE      22. Dez 2014
  * 
  ********************************************************************************/
 #ifndef MATRIX_H
@@ -27,8 +27,8 @@ typedef struct sMatrixDouble
 } sMatrixDouble;
 
 /* Global variables */
-int iNumThreads;
-sMatrixDouble sMgrid, sMTmp;;
+int iNumThreads, index;;
+sMatrixDouble sMgrid[2]; //, sMTmp;
 
 /*
  * DESCRIPTION - does the relaxion, serial

@@ -5,13 +5,13 @@
  *                  the Parallel Computer Architecture (PCA) lecture of the 
  *                  University of Heidelberg.
  * 
- *                  Exercise 5 - Implementation for the Matrix-handling
+ *                  Exercise 7 - Implementation for the Matrix-handling
  * 
  * AUTHORS          Shamna Shyju (shamnashyju@googlemail.com)
  *                  Fabian Finkeldey (Fabian@Finkeldey-hm.de)
  *                  Günther Schindler (G.Schindler@stud.uni-heidelberg.de)
  *
- * LAST CHANGE      29. Nov 2014
+ * LAST CHANGE      22. Dez 2014
  * 
  ********************************************************************************/
 #include <stdio.h>
@@ -59,23 +59,18 @@ int iAllocMatrixDouble(sMatrixDouble *pM, int iRow, int iCol)
 void vRelaxMatrixSer()
 {
   int i,j;
-  /* Copy each matrix element in the temporary matrix */
-  for(i=0; i<sMgrid.iRow; i++)
-    for(j=0; j<sMgrid.iCol; j++)
-      sMTmp.ppaMat[i][j]=sMgrid.ppaMat[i][j];
+  
   /* Calculate new grid points */
-  for(i=0; i<sMgrid.iRow; i++)
-    for(j=0; j<sMgrid.iCol; j++)
+  for(i=0; i<sMgrid[index].iRow; i++)
+    for(j=0; j<sMgrid[index].iCol; j++)
     {
-      /* Set boundary points to 0.0 */
-      if(i==0  || i==sMgrid.iRow-1 || j==0 || j==sMgrid.iCol-1)
-        sMgrid.ppaMat[i][j]=0.0;
-      else
+      /* Ignore boundary points */
+      if(!(i==0  || i==sMgrid[index].iRow-1 || j==0 || j==sMgrid[index].iCol-1))
       {
-        sMgrid.ppaMat[i][j]=sMTmp.ppaMat[i][j];
-        sMgrid.ppaMat[i][j]+=FI*((-4)*sMTmp.ppaMat[i][j] \
-                           +sMTmp.ppaMat[i+1][j]+sMTmp.ppaMat[i-1][j] \
-                           +sMTmp.ppaMat[i][j+1]+sMTmp.ppaMat[i][j-1]);
+        sMgrid[1-index].ppaMat[i][j]=sMgrid[index].ppaMat[i][j];
+        sMgrid[1-index].ppaMat[i][j]+=FI*((-4)*sMgrid[index].ppaMat[i][j] \
+                           +sMgrid[index].ppaMat[i+1][j]+sMgrid[index].ppaMat[i-1][j] \
+                           +sMgrid[index].ppaMat[i][j+1]+sMgrid[index].ppaMat[i][j-1]);
       }
     }
 }
@@ -84,23 +79,24 @@ void vRelaxMatrixPar(int slice)
 {
   int i,j;
   int s = slice;
-  int iFrom = (s * sMgrid.iRow)/iNumThreads;
-  int iTo = ((s+1) * sMgrid.iRow)/iNumThreads;
+  int iFrom = (s * sMgrid[index].iRow)/iNumThreads;
+  int iTo = ((s+1) * sMgrid[index].iRow)/iNumThreads;
 
   /* Calculate new grid points */
   for(i = iFrom; i < iTo; i++)
-    for(j=0; j<sMgrid.iCol; j++)
+    for(j=0; j<sMgrid[index].iCol; j++)
     {
       /* Ignore boundary points */
-      if(!(i==0  || i==sMgrid.iRow-1 || j==0 || j==sMgrid.iCol-1))
+      if(!(i==0  || i==sMgrid[index].iRow-1 || j==0 || j==sMgrid[index].iCol-1))
       {
-        sMgrid.ppaMat[i][j]=sMTmp.ppaMat[i][j];
-        sMgrid.ppaMat[i][j]+=FI*((-4)*sMTmp.ppaMat[i][j] \
-                           +sMTmp.ppaMat[i+1][j]+sMTmp.ppaMat[i-1][j] \
-                           +sMTmp.ppaMat[i][j+1]+sMTmp.ppaMat[i][j-1]);
+        sMgrid[1-index].ppaMat[i][j]=sMgrid[index].ppaMat[i][j];
+        sMgrid[1-index].ppaMat[i][j]+=FI*((-4)*sMgrid[index].ppaMat[i][j] \
+                           +sMgrid[index].ppaMat[i+1][j]+sMgrid[index].ppaMat[i-1][j] \
+                           +sMgrid[index].ppaMat[i][j+1]+sMgrid[index].ppaMat[i][j-1]);
       }
     }
 }
+
 
 void vFillCircleMatrix(sMatrixDouble *pM, int iDiameter, double dValue)
 {
