@@ -24,5 +24,11 @@ relaxation :
 					src/7.1/matrix.c \
 					src/7.1/time_measurement.c \
 					-o relaxation
+
+nbody :
+	$(CC) $(CFLAGS) $(LDLIBS)	src/7.2/main.c \
+					src/7.2/nbody.c \
+					src/7.2/time_measurement.c \
+					-o nbody
 clean :
-	rm -f relaxation
+	rm -f relaxation nbody
