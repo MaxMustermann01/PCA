@@ -16,11 +16,12 @@
  * 
  ********************************************************************************/
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <mpi.h>
 
 #define MAX_SIZE 1048576    // 2^20
-#define ITERATIONS 100
+#define ITERATIONS 1000
 
 int main(int argc, char* argv[])
 {
@@ -60,7 +61,7 @@ int main(int argc, char* argv[])
       endtime = MPI_Wtime();
       elapsedtime = (endtime - starttime) / ITERATIONS;
       
-      printf("Half-round-trip latency (%lf Byte): %lf s", i, elapsedtime / 2);
+      printf("Half-round-trip latency (%d Byte): %lf s \n", i, elapsedtime / 2);
     }
     else
     {
