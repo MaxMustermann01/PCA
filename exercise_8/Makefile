@@ -23,5 +23,9 @@ hello :
 	$(CC) $(CFLAGS) $(LDLIBS)	src/8.2/main.c \
 					-o hello
 
+latency :
+	$(CC) $(CFLAGS) $(LDLIBS)	src/8.3/main.c \
+					-o latency
+
 clean :
-	rm -f hello
+	rm -f hello latency
