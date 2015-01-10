@@ -20,7 +20,7 @@ LDLIBS =
 CFLAGS += -O3
 
 hello :
-	$(CC) $(CFLAGS) $(LDLIBS)	src/7.1/main.c \
+	$(CC) $(CFLAGS) $(LDLIBS)	src/8.2/main.c \
 					-o hello
 
 clean :
