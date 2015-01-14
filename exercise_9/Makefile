@@ -11,7 +11,7 @@ CFLAGS = -Wall
 relaxation:
 	$(CC) $(CFLAGS)		src/9.2/main.c \
 				src/9.2/matrix.c \
-				src/9.2/time_measurement.c
+				src/9.2/time_measurement.c \
 				-o relaxation
 
 clean :

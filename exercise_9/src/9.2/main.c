@@ -33,7 +33,7 @@
 
 int main(int argc, char* argv[])
 {
-  int iSize, iIterations, iOpt, j, k;
+  int iSize, iIterations, iOpt, i, j, k;
   /* MPI variables */
   int iErrorcode = 0, iNumTasks, iTaskID, iNumWorker;
   int iFrom, iTo, iRows, iCols;
