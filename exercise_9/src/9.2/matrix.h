@@ -1,18 +1,18 @@
 /*********************************************************************************
- * FILENAME         matrix.h
- *
+ * FILENAME         main.c
+ * 
  * DESCRIPTION      These functions are part of the submission to exercises of 
- *                  the "Introduction to High Percformance Computing" (Intro HPC) 
- *                  lecture of the University of Heidelberg.
+ *                  the Parallel Computer Architecture (PCA) lecture of the 
+ *                  University of Heidelberg.
  * 
- *                  Exercise 6 - Heat relaxation, parallel
+ *                  Exercise 9 - functions for the Heat equation
  * 
- * AUTHORS          Klaus Naumann
- *                  Christoph Klein
- *                  Günther Schindler
+ * AUTHORS          Shamna Shyju (shamnashyju@googlemail.com)
+ *                  Fabian Finkeldey (Fabian@Finkeldey-hm.de)
+ *                  Günther Schindler (G.Schindler@stud.uni-heidelberg.de)
  *
- * LAST CHANGE      21. NOV 2014
- *
+ * LAST CHANGE      14. Dez 2015
+ * 
  ********************************************************************************/
 #ifndef MATRIX_H
 #define MATRIX_H
@@ -27,20 +27,19 @@ typedef struct sMatrixDouble
 } sMatrixDouble;
 
 /*
- * DESCRIPTION - does the relaxion
- * PARAMETER   - sMatrixInt: pointer to a sMatrix type which should be iterated
- *
- * RETURN       - void 
+ * DESCRIPTION - Inject Matrix with elements 
+ * PARAMETER   - sMatrixInt: pointer to a sMatrix type in which should be injected
+ *               int: diameter
+ *               int: heat-Value
+ * RETURN      - void 
  */
-void vRelaxInteriorElement(sMatrixDouble *);
+void vFillCircleMatrix(sMatrixDouble *, int, double);
 
 /*
- * DESCRIPTION - Inject Matrix with elements 
+ * DESCRIPTION - Run the heat relaxation 
  * PARAMETER   - sMatrixInt: pointer to a sMatrix type in which should be injected
  * RETURN      - void 
  */
-void vInjectMatrix(sMatrixDouble *);
-void vFillCircleMatrix(sMatrixDouble *, int, double);
 void vRelaxMatrix(sMatrixDouble *);
 
 /*

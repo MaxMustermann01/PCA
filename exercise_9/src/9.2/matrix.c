@@ -1,18 +1,18 @@
 /*********************************************************************************
  * FILENAME         matrix.c
- *
+ * 
  * DESCRIPTION      These functions are part of the submission to exercises of 
- *                  the "Introduction to High Percformance Computing" (Intro HPC) 
- *                  lecture of the University of Heidelberg.
+ *                  the Parallel Computer Architecture (PCA) lecture of the 
+ *                  University of Heidelberg.
  * 
- *                  Exercise 6 - Heat relaxation, parallel
+ *                  Exercise 9 - functions for the grid handling
  * 
- * AUTHORS          Klaus Naumann
- *                  Christoph Klein
- *                  Günther Schindler
+ * AUTHORS          Shamna Shyju (shamnashyju@googlemail.com)
+ *                  Fabian Finkeldey (Fabian@Finkeldey-hm.de)
+ *                  Günther Schindler (G.Schindler@stud.uni-heidelberg.de)
  *
- * LAST CHANGE      21. NOV 2014
- *
+ * LAST CHANGE      14. Dez 2015
+ * 
  ********************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
@@ -73,22 +73,6 @@ void vRelaxMatrix(sMatrixDouble *pM)
   vFreeMatrixDouble(&sMTmp);
 }
 
-void vInjectMatrix(sMatrixDouble *pM)
-{
-  int i,j;
-  
-  for(i=0; i<pM->iRow; i++)
-  {
-    for(j=0; j<pM->iCol; j++)
-    {
-      if(i == 0 && j >= (pM->iCol/4) && j <= (3*(pM->iCol)/4))
-	pM->ppaMat[i][j]=127.0;
-      else
-	pM->ppaMat[i][j]=0.0;
-    }
-  }
-}
-
 void vFillCircleMatrix(sMatrixDouble *pM, int iDiameter, double dValue)
 {
   int i,j,x,y,a,b, iRadius;
@@ -115,10 +99,6 @@ void vFillCircleMatrix(sMatrixDouble *pM, int iDiameter, double dValue)
 void vFreeMatrixDouble(sMatrixDouble *pM)
 {
   int i;
-  /* free the Rows */
-  //for(i=0; i<pM->iRow; i++)
-    //free(pM->ppaMat[i]);
-  /* free cols */
   free(pM->ppaMat[0]);
   free(pM->ppaMat);
 }

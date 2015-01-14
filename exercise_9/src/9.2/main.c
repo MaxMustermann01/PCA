@@ -1,18 +1,18 @@
 /*********************************************************************************
  * FILENAME         main.c
- *
+ * 
  * DESCRIPTION      These functions are part of the submission to exercises of 
- *                  the "Introduction to High Percformance Computing" (Intro HPC) 
- *                  lecture of the University of Heidelberg.
+ *                  the Parallel Computer Architecture (PCA) lecture of the 
+ *                  University of Heidelberg.
  * 
- *                  Exercise 6 - Heat relaxation, parallel
+ *                  Exercise 9 - main function for the Heat equation
  * 
- * AUTHORS          Klaus Naumann
- *                  Christoph Klein
- *                  Günther Schindler
+ * AUTHORS          Shamna Shyju (shamnashyju@googlemail.com)
+ *                  Fabian Finkeldey (Fabian@Finkeldey-hm.de)
+ *                  Günther Schindler (G.Schindler@stud.uni-heidelberg.de)
  *
- * LAST CHANGE      21. NOV 2014
- *
+ * LAST CHANGE      14. Dez 2015
+ * 
  ********************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,20 +33,16 @@
 
 int main(int argc, char* argv[])
 {
-  int iSize, iIterations, iOpt, i, j, k;
+  int iSize, iIterations, iOpt, j, k;
   /* MPI variables */
-  int iErrorcode, iNumTasks, iTaskID, iNumWorker;
-  int iFrom, iTo, iOffset, iRows, iCols;
-  int iLeftNeighbor, iRightNeighbor;
+  int iErrorcode = 0, iNumTasks, iTaskID, iNumWorker;
+  int iFrom, iTo, iRows, iCols;
   MPI_Status mpiStatus;
   MPI_Request snd_request_1, snd_request_2, snd_request_3, snd_request_4, snd_request_5;
   MPI_Request rcv_request_1, rcv_request_2, rcv_request_3, rcv_request_4, rcv_request_5;
   int periods[1], dims[1], reorganisation=0, ndims, index, displ, Neighbor[2];
-  int rank, coords[1], cart_rank;
   MPI_Comm comm, comm1d;
   double dpar1, dpar2, dser1, dser2;
-  
-  double dValue;
   sMatrixDouble sMgrid, sMgridSer, sMgridTmp[2];
   int iIndex = 0;
 
@@ -207,21 +203,12 @@ int main(int argc, char* argv[])
                                              +sMgridTmp[iIndex].ppaMat[j][k+1] \
                                              +sMgridTmp[iIndex].ppaMat[j][k-1]);
         }
-      /* Wait until data from neighbor is arrived */
-      if(Neighbor[NORTH] > 0)
-      {
-        MPI_Wait(&snd_request_1, &mpiStatus);
-        MPI_Wait(&rcv_request_1, &mpiStatus);
-      }
-      if(Neighbor[SOUTH] > 0)
-      {
-        MPI_Wait(&snd_request_2, &mpiStatus);
-        MPI_Wait(&rcv_request_2, &mpiStatus);
-      }
 
       if(Neighbor[NORTH] > 0)
       {
         j=1;
+        MPI_Wait(&snd_request_1, &mpiStatus);
+        MPI_Wait(&rcv_request_1, &mpiStatus);
         for(k=1; k<iCols-1; k++){
           sMgridTmp[1-iIndex].ppaMat[j][k]   =sMgridTmp[iIndex].ppaMat[j][k] \
                                              +FI*((-4)*sMgridTmp[iIndex].ppaMat[j][k] \
@@ -231,16 +218,12 @@ int main(int argc, char* argv[])
                                              +sMgridTmp[iIndex].ppaMat[j][k-1]);
         }
       }
-      else
-      {
-        /* Copy Heat Injection */
-        j=1;
-        //for(k=1; k<iCols-1; k++)
-        //  sMgridTmp[1-iIndex].ppaMat[j][k] = sMgridTmp[iIndex].ppaMat[j][k];
-      }
+     
       if(Neighbor[SOUTH] > 0)
       {
         j=iRows;
+        MPI_Wait(&snd_request_2, &mpiStatus);
+        MPI_Wait(&rcv_request_2, &mpiStatus);
         for(k=1; k<iCols-1; k++)
         {
           sMgridTmp[1-iIndex].ppaMat[j][k] =sMgridTmp[iIndex].ppaMat[j][k] \

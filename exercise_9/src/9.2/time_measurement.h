@@ -1,18 +1,18 @@
 /*********************************************************************************
  * FILENAME         time_measurement.h
- *
+ * 
  * DESCRIPTION      These functions are part of the submission to exercises of 
- *                  the "Introduction to High Percformance Computing" (Intro HPC) 
- *                  lecture of the University of Heidelberg.
+ *                  the Parallel Computer Architecture (PCA) lecture of the 
+ *                  University of Heidelberg.
  * 
- *                  Exercise 5 - Heat relaxation
+ *                  Exercise 9 - functions for the Heat equation
  * 
- * AUTHORS          Klaus Naumann
- *                  Christoph Klein
- *                  Günther Schindler
+ * AUTHORS          Shamna Shyju (shamnashyju@googlemail.com)
+ *                  Fabian Finkeldey (Fabian@Finkeldey-hm.de)
+ *                  Günther Schindler (G.Schindler@stud.uni-heidelberg.de)
  *
- * LAST CHANGE      20. NOV 2014
- *
+ * LAST CHANGE      14. Dez 2015
+ * 
  ********************************************************************************/
 
 #ifndef TIME_MEASUREMENT_H
