@@ -17,6 +17,8 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
+#define FI 0.24
+
 typedef struct sMatrixDouble
 {
   int iRow;       // for rows
@@ -38,6 +40,8 @@ void vRelaxInteriorElement(sMatrixDouble *);
  * RETURN      - void 
  */
 void vInjectMatrix(sMatrixDouble *);
+void vFillCircleMatrix(sMatrixDouble *, int, double);
+void vRelaxMatrix(sMatrixDouble *);
 
 /*
  * DESCRIPTION - Allocate memory for the dynamic matrix;

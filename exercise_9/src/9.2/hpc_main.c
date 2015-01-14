@@ -26,8 +26,7 @@
 #define LEFTTAG 2
 #define RIGHTTAG 3
 #define DONE 4
-#define DIAMETER 128
-#define HEAT 60
+
 #define SOUTH 0
 #define NORTH 1
 
@@ -39,15 +38,14 @@ int main(int argc, char* argv[])
   int iFrom, iTo, iOffset, iRows, iCols;
   int iLeftNeighbor, iRightNeighbor;
   MPI_Status mpiStatus;
-  MPI_Request snd_request_1, snd_request_2, snd_request_3, snd_request_4, snd_request_5;
-  MPI_Request rcv_request_1, rcv_request_2, rcv_request_3, rcv_request_4, rcv_request_5;
+  MPI_Request snd_request_1, snd_request_2, rcv_request_1, rcv_request_2;
   int periods[1], dims[1], reorganisation=0, ndims, index, displ, Neighbor[2];
   int rank, coords[1], cart_rank;
   MPI_Comm comm, comm1d;
-  double dpar1, dpar2, dser1, dser2;
+  double t1, t2;
   
   double dValue;
-  sMatrixDouble sMgrid, sMgridSer, sMgridTmp[2];
+  sMatrixDouble sMgrid, sMgridTmp[2];
   int iIndex = 0;
 
   MPI_Init(&argc, &argv);
@@ -86,11 +84,10 @@ int main(int argc, char* argv[])
     
     /* Allocate memory for grid and inject heat */
     iAllocMatrixDouble(&sMgrid, iSize, iSize);
-    vFillCircleMatrix(&sMgrid, DIAMETER, HEAT);
+    vInjectMatrix(&sMgrid);
     
     /* Start time-measurement */
-    dpar1 = MPI_Wtime();
-    /********************* Start parallel equation ********************/
+    t1 = MPI_Wtime();
     /* Distribute work to tasks */
     for(i=1; i<=iNumWorker; i++)
     {
@@ -98,91 +95,49 @@ int main(int argc, char* argv[])
       iFrom = ((i-1) * sMgrid.iRow) / iNumWorker;
       iTo = (i * sMgrid.iRow) / iNumWorker;
       iRows = iTo - iFrom;
-      iCols = iSize;
- 
+      iCols = iSize; 
       /* Send offset, number of coloumns, iterations and number of rows */
-      MPI_Isend(&iFrom, 1, MPI_INT, i, BEGIN, comm1d, &snd_request_1);
-      MPI_Isend(&iRows, 1, MPI_INT, i, BEGIN, comm1d, &snd_request_2);
-      MPI_Isend(&iCols, 1, MPI_INT, i, BEGIN, comm1d, &snd_request_3);
-      MPI_Isend(&iIterations, 1, MPI_INT, i, BEGIN, comm1d, &snd_request_4);
+      MPI_Send(&iFrom, 1, MPI_INT, i, BEGIN, comm1d);
+      MPI_Send(&iRows, 1, MPI_INT, i, BEGIN, comm1d);
+      MPI_Send(&iCols, 1, MPI_INT, i, BEGIN, comm1d);
+      MPI_Send(&iIterations, 1, MPI_INT, i, BEGIN, comm1d);
       /* Send Data */
-      MPI_Isend(&(sMgrid.ppaMat[iFrom][0]), iRows*iCols, MPI_DOUBLE, i, BEGIN, comm1d, &snd_request_5);
+      MPI_Send(&(sMgrid.ppaMat[iFrom][0]), iRows*iCols, MPI_DOUBLE, i, BEGIN, comm1d);
     }
-    /* Wait for all messages to transmit */
-    MPI_Wait(&snd_request_1, &mpiStatus);
-    MPI_Wait(&snd_request_2, &mpiStatus);
-    MPI_Wait(&snd_request_3, &mpiStatus);
-    MPI_Wait(&snd_request_4, &mpiStatus);
-    MPI_Wait(&snd_request_5, &mpiStatus);
     /* Collect results from tasks */
     for(i=1; i<=iNumWorker; i++)
     {
-      MPI_Irecv(&iFrom, 1, MPI_INT, i, DONE, comm1d, &rcv_request_1);
-      MPI_Irecv(&iRows, 1, MPI_INT, i, DONE, comm1d, &rcv_request_2);
-      MPI_Wait(&rcv_request_1, &mpiStatus);
-      MPI_Wait(&rcv_request_2, &mpiStatus);
-
-      MPI_Irecv(&(sMgrid.ppaMat[iFrom][0]), iRows*sMgrid.iCol, MPI_DOUBLE, i, DONE, comm1d, &rcv_request_3);
+      MPI_Recv(&iFrom, 1, MPI_INT, i, DONE, comm1d, &mpiStatus);
+      MPI_Recv(&iRows, 1, MPI_INT, i, DONE, comm1d, &mpiStatus);
+      MPI_Recv(&(sMgrid.ppaMat[iFrom][0]), iRows*sMgrid.iCol, MPI_DOUBLE, i, DONE, comm1d, &mpiStatus);
     }
-    MPI_Wait(&rcv_request_3, &mpiStatus);
-    /****************** End parallel equation **********************/
     /* Stop time-measurement */
-    dpar2 = MPI_Wtime();
-
-    /******************* Start serial equation **********************/
-    /* Allocate memory for grid */
-    if(iAllocMatrixDouble(&sMgridSer, iSize, iSize))
-    {
-      printf("DEBUG: Allocation failure!");
-      exit(1);
-    }
-
-    vFillCircleMatrix(&sMgrid, DIAMETER, HEAT);
-    
-    dser1 = MPI_Wtime();
-    for(i = 0; i < iIterations; i++)
-      vRelaxMatrix(&sMgrid);
-    dser2 = MPI_Wtime();
-
-    /******************* End serial equation ************************/
-    
+    t2 = MPI_Wtime();
     /* Print grid to std-output */
     if(iOpt == 1)
       vPrintMatrixDouble(&sMgrid);
     else
-    {
-      printf(" \n Elapsed Time : ");
-      printf(" \n   Parallel %lf s\n",(dpar2-dpar1)/iIterations);
-      printf(" \n   Serial   %lf s\n",(dser2-dser1)/iIterations);
-      printf(" \n   Speed-Up %lf \n",(dser2-dser1)/(dpar2-dpar1));
-    }
+      printf(" \n Elapsed Time : %lf \n",(t2-t1)/iIterations);
     /* Free allocated memory */
     vFreeMatrixDouble(&sMgrid);
-    vFreeMatrixDouble(&sMgridSer);
   }
   /************************************ Slave process *********************************/
   else
   {
+    printf("test 7\n");
     /* Recieve offset, number of coloums, iterations and number of rows */
-    MPI_Irecv(&iFrom, 1, MPI_INT, MASTER, BEGIN, comm1d, &rcv_request_1);
-    MPI_Irecv(&iRows, 1, MPI_INT, MASTER, BEGIN, comm1d, &rcv_request_2);
-    MPI_Irecv(&iCols, 1, MPI_INT, MASTER, BEGIN, comm1d, &rcv_request_3);
-    MPI_Irecv(&iIterations, 1, MPI_INT, MASTER, BEGIN, comm1d, &rcv_request_4);
-
-    MPI_Wait(&rcv_request_2, &mpiStatus);
-    MPI_Wait(&rcv_request_3, &mpiStatus);
-
+    MPI_Recv(&iFrom, 1, MPI_INT, MASTER, BEGIN, comm1d, &mpiStatus);
+    MPI_Recv(&iRows, 1, MPI_INT, MASTER, BEGIN, comm1d, &mpiStatus);
+    MPI_Recv(&iCols, 1, MPI_INT, MASTER, BEGIN, comm1d, &mpiStatus);
+    MPI_Recv(&iIterations, 1, MPI_INT, MASTER, BEGIN, comm1d, &mpiStatus);
     /* Allocate memory for grid-slice and for temporary grid */
     iAllocMatrixDouble(&sMgridTmp[0], iRows+2, iCols);
     iAllocMatrixDouble(&sMgridTmp[1], iRows+2, iCols);
-    
-    MPI_Wait(&rcv_request_1, &mpiStatus);
-    MPI_Wait(&rcv_request_4, &mpiStatus);
+
     /* Recieve data from master */
     /* Start with index 0 */
     iIndex = 0;
-    MPI_Irecv(&(sMgridTmp[iIndex].ppaMat[1][0]), iRows*iCols, MPI_DOUBLE, MASTER, BEGIN, comm1d, &rcv_request_5);
-    MPI_Wait(&rcv_request_5, &mpiStatus);
+    MPI_Recv(&(sMgridTmp[iIndex].ppaMat[1][0]), iRows*iCols, MPI_DOUBLE, MASTER, BEGIN, comm1d, &mpiStatus);
     for(i=0; i<iIterations; i++)
     {
       if(Neighbor[NORTH] > 0)
@@ -235,8 +190,8 @@ int main(int argc, char* argv[])
       {
         /* Copy Heat Injection */
         j=1;
-        //for(k=1; k<iCols-1; k++)
-        //  sMgridTmp[1-iIndex].ppaMat[j][k] = sMgridTmp[iIndex].ppaMat[j][k];
+        for(k=1; k<iCols-1; k++)
+          sMgridTmp[1-iIndex].ppaMat[j][k] = sMgridTmp[iIndex].ppaMat[j][k];
       }
       if(Neighbor[SOUTH] > 0)
       {
@@ -255,14 +210,9 @@ int main(int argc, char* argv[])
       iIndex = 1 - iIndex;
     }
     /* Send results back to master */
-    MPI_Isend(&iFrom, 1, MPI_INT, MASTER, DONE, comm1d, &snd_request_1);
-    MPI_Isend(&iRows, 1, MPI_INT, MASTER, DONE, comm1d, &snd_request_2);
-    MPI_Isend(&(sMgridTmp[iIndex].ppaMat[1][0]), iRows*iCols, MPI_DOUBLE, MASTER, DONE, comm1d, &snd_request_3);
-  
-    MPI_Wait(&snd_request_1, &mpiStatus); 
-    MPI_Wait(&snd_request_2, &mpiStatus);
-    MPI_Wait(&snd_request_3, &mpiStatus); 
-    
+    MPI_Send(&iFrom, 1, MPI_INT, MASTER, DONE, comm1d);
+    MPI_Send(&iRows, 1, MPI_INT, MASTER, DONE, comm1d);
+    MPI_Send(&(sMgridTmp[iIndex].ppaMat[1][0]), iRows*iCols, MPI_DOUBLE, MASTER, DONE, comm1d);
     /* Free allocated memory */
     vFreeMatrixDouble(&sMgridTmp[1-iIndex]);
     vFreeMatrixDouble(&sMgridTmp[iIndex]);

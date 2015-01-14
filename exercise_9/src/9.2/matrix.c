@@ -42,9 +42,35 @@ int iAllocMatrixDouble(sMatrixDouble *pM, int iRow, int iCol)
   return iRet;
 }
 
-void vRelaxInteriorElement(sMatrixDouble *pM)
+void vRelaxMatrix(sMatrixDouble *pM)
 {
-  
+  int i,j;
+  sMatrixDouble sMTmp;
+  /* Allocate memory for temporary matrix */
+  if(iAllocMatrixDouble(&sMTmp, pM->iRow, pM->iCol))
+  {
+    printf("DEBUG: Allocation failure!");
+    exit(1);
+  }
+  /* Copy each matrix element in the temporary matrix */
+  for(i=0; i<pM->iRow; i++)
+    for(j=0; j<pM->iCol; j++)
+      sMTmp.ppaMat[i][j]=pM->ppaMat[i][j];
+  /* Calculate new grid points */
+  for(i=0; i<pM->iRow; i++)
+    for(j=0; j<pM->iCol; j++)
+    {
+      /* Set boundary points to 0.0 */
+      if(i==0  || i==pM->iRow-1 || j==0 || j==pM->iCol-1)
+        pM->ppaMat[i][j]=0.0;
+      else
+      {
+	pM->ppaMat[i][j]=sMTmp.ppaMat[i][j];
+	pM->ppaMat[i][j]+=FI*((-4)*sMTmp.ppaMat[i][j]+sMTmp.ppaMat[i+1][j]+sMTmp.ppaMat[i-1][j]+sMTmp.ppaMat[i][j+1]+sMTmp.ppaMat[i][j-1]);
+      }
+    }
+  /* Delete temporary matrix again */
+  vFreeMatrixDouble(&sMTmp);
 }
 
 void vInjectMatrix(sMatrixDouble *pM)
@@ -59,6 +85,29 @@ void vInjectMatrix(sMatrixDouble *pM)
 	pM->ppaMat[i][j]=127.0;
       else
 	pM->ppaMat[i][j]=0.0;
+    }
+  }
+}
+
+void vFillCircleMatrix(sMatrixDouble *pM, int iDiameter, double dValue)
+{
+  int i,j,x,y,a,b, iRadius;
+  
+  x=pM->iCol / 2;
+  y=pM->iRow / 2;
+  iRadius = iDiameter / 2;
+  
+  for(i=0; i<pM->iRow; i++)
+  {
+    for(j=0; j<pM->iCol; j++)
+    {
+      a = i-x;
+      b = j-y;
+      /* Set boundary points to 0.0 */
+      if(i==0  || i==pM->iRow-1 || j==0 || j==pM->iCol-1)
+        pM->ppaMat[i][j]=0.0;
+      else if((a*a+b*b)<=(iRadius*iRadius))
+	pM->ppaMat[i][j]=dValue;
     }
   }
 }
