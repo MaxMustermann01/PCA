@@ -27,15 +27,15 @@ int main(int argc, char* argv[])
 {
   int i, iPrecision;
   int iFrom, iTo;
-  int iNumTasks, iTaskID, iNumWorker;
+  int iNumTasks, iTaskID, iNumWorker, iErrorcode = 0;
   double dPiSer, dPiPar, dTmpRes;
   double dpar1, dpar2, dser1, dser2;
-  MPI_Comm, comm;
+  MPI_Comm comm;
   MPI_Request snd_request_1, snd_request_2;
   MPI_Request rcv_request_1, rcv_request_2;
   MPI_Status mpiStatus;
   
-  MPI_init(&argc, &argv);
+  MPI_Init(&argc, &argv);
   comm = MPI_COMM_WORLD;
   MPI_Comm_size(comm, &iNumTasks);
   MPI_Comm_rank(comm, &iTaskID);
@@ -61,18 +61,17 @@ int main(int argc, char* argv[])
     /* Distribute work to slaves */
     for(i = 1; i <= iNumWorker; i++)
     {
-      /* Figure out which many summands to send */
+      /* Figure out which summands to send */
       iFrom = ((i-1) * iPrecision) / iNumWorker;
       iTo = (i * iPrecision) / iNumWorker;
       
       /* Send summnads to slaves */
       MPI_Isend(&iFrom, 1, MPI_INT, i, BEGIN, comm, &snd_request_1);
       MPI_Isend(&iTo, 1, MPI_INT, i, BEGIN, comm, &snd_request_2);
+      /* Wait for messages to be sent */
+      MPI_Wait(&snd_request_1, &mpiStatus);
+      MPI_Wait(&snd_request_2, &mpiStatus);
     }
-    
-    /* Wait for messages to be sent */
-    MPI_Wait(&snd_request_1, &mpiStatus);
-    MPI_Wait(&snd_request_2, &mpiStatus);
     
     dPiPar = 0.0;
     /* Collect and sum up results from tasks */
@@ -102,7 +101,7 @@ int main(int argc, char* argv[])
     printf(" \n    Serial");
     printf(" \n      Pi   = %lf", dPiSer);
     printf(" \n      Time = %lfs\n", (dser2-dser1));
-    printf(" \n    Speed-Up  =  %lf", (dser2-dser1)/(dpar2-dpar1));
+    printf(" \n    Speed-Up  =  %lf\n", (dser2-dser1)/(dpar2-dpar1));
   }
   /********************************* End Master **************************************/
   /********************************* Slave Process ***********************************/
@@ -110,19 +109,19 @@ int main(int argc, char* argv[])
   {
     /* Recieve summands from master */
     MPI_Irecv(&iFrom, 1, MPI_INT, MASTER, BEGIN, comm, &rcv_request_1);
-    MPI_Irecv(&iTo, 1, MPI_INT, Master, BEGIN, comm, &rcv_request_2);
+    MPI_Irecv(&iTo, 1, MPI_INT, MASTER, BEGIN, comm, &rcv_request_2);
     
     /* Wait for messages to be transmitted */
+    MPI_Wait(&rcv_request_1, &mpiStatus);
     MPI_Wait(&rcv_request_2, &mpiStatus);
-    MPI_Wait(&rcv_request_3, &mpiStatus);
     
     /* Calculate summands */
     dPiPar = 0.0;
-    for(i = From; i < iTo; i++)
+    for(i = iFrom; i < iTo; i++)
       dPiPar += pow(-1.0, (double)i) / (double)(2 * i + 1);
     
     /* Send result to master */
-    MPI_Isend(&dPiPar, 1, MPI_DOUBLE, MASTER, DONE, comm, %snd_request_1);
+    MPI_Isend(&dPiPar, 1, MPI_DOUBLE, MASTER, DONE, comm, &snd_request_1);
     MPI_Wait(&snd_request_1, &mpiStatus);
   }
   /********************************* End Slave ***************************************/
