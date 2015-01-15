@@ -98,7 +98,6 @@ void vFillCircleMatrix(sMatrixDouble *pM, int iDiameter, double dValue)
 
 void vFreeMatrixDouble(sMatrixDouble *pM)
 {
-  int i;
   free(pM->ppaMat[0]);
   free(pM->ppaMat);
 }
