@@ -8,6 +8,11 @@ CC = mpicc
 CPP = mpic++
 CFLAGS = -Wall
 
+approximation:
+	$(CC) $(CFLAGS)		src/9.1/main.c \
+				-o approximation \
+				-lm
+
 relaxation:
 	$(CC) $(CFLAGS)		src/9.2/main.c \
 				src/9.2/matrix.c \
@@ -15,4 +20,4 @@ relaxation:
 				-o relaxation
 
 clean :
-	rm -f 	relaxation
+	rm -f 	relaxation approximation
