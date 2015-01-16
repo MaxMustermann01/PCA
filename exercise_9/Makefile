@@ -20,8 +20,4 @@ relaxation:
 				-o relaxation
 
 clean :
-<<<<<<< HEAD
 	rm -f 	relaxation approximation
-=======
-	rm -f 	relaxation
->>>>>>> da48763ccf1338186cfe7e823c3e6775fb5c9b16

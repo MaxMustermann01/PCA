@@ -103,13 +103,14 @@ int main(int argc, char* argv[])
       MPI_Isend(&iIterations, 1, MPI_INT, i, BEGIN, comm1d, &snd_request_4);
       /* Send Data */
       MPI_Isend(&(sMgrid.ppaMat[iFrom][0]), iRows*iCols, MPI_DOUBLE, i, BEGIN, comm1d, &snd_request_5);
+
+      /* Wait for all messages to transmit */
+      MPI_Wait(&snd_request_1, &mpiStatus);
+      MPI_Wait(&snd_request_2, &mpiStatus);
+      MPI_Wait(&snd_request_3, &mpiStatus);
+      MPI_Wait(&snd_request_4, &mpiStatus);
+      MPI_Wait(&snd_request_5, &mpiStatus);
     }
-    /* Wait for all messages to transmit */
-    MPI_Wait(&snd_request_1, &mpiStatus);
-    MPI_Wait(&snd_request_2, &mpiStatus);
-    MPI_Wait(&snd_request_3, &mpiStatus);
-    MPI_Wait(&snd_request_4, &mpiStatus);
-    MPI_Wait(&snd_request_5, &mpiStatus);
     /* Collect results from tasks */
     for(i=1; i<=iNumWorker; i++)
     {
@@ -147,10 +148,14 @@ int main(int argc, char* argv[])
       vPrintMatrixDouble(&sMgrid);
     else
     {
-      printf(" \n Elapsed Time : ");
-      printf(" \n   Parallel %lf s\n",(dpar2-dpar1)/iIterations);
-      printf(" \n   Serial   %lf s\n",(dser2-dser1)/iIterations);
-      printf(" \n   Speed-Up %lf \n",(dser2-dser1)/(dpar2-dpar1));
+      printf(" \n Heat-Equation ");
+      printf(" \n   Parallel\n");
+      printf("         Time/Iteration : %lf s\n",(dpar2-dpar1)/iIterations);
+      printf("         Iteration/s    : %lf\n", iIterations/(dpar2-dpar1));
+      printf(" \n   Serial\n");
+      printf("         Time/Iteration : %lf s\n",(dser2-dser1)/iIterations);
+      printf("         Iterations/s   : %lf\n", iIterations/(dser2-dser1));
+      printf(" \n   Speed-Up             : %lf \n",(dser2-dser1)/(dpar2-dpar1));
     }
     /* Free allocated memory */
     vFreeMatrixDouble(&sMgrid);
